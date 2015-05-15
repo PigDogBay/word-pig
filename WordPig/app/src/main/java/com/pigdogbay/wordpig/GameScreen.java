@@ -24,6 +24,7 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener 
     private Board _Board;
     private BitmapButton _GoButton, _ClearButton;
     private Paint _TextPaint,_TimerOuterPaint,_TimerInnerPaint, _BoomPaint;
+    //Need a game event system so can fire off sounds
     private SoundManager _SoundManager;
 
     public void setSoundManager(SoundManager soundManager){_SoundManager=soundManager;}
