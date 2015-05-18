@@ -32,6 +32,7 @@ public class Board
     private List<String> usedWords;
     private GameState gameState;
     private Timer timer;
+    private GameEvent gameEvent;
 
     public Board(Screen screen)
     {
@@ -45,6 +46,12 @@ public class Board
         usedWords = new ArrayList<String>();
         gameState = GameState.Initialize;
         timer = new Timer(0);
+        this.gameEvent = new GameEvent();
+    }
+
+    public void addEventListener(GameEvent.IGameEventListener listener)
+    {
+        this.gameEvent.addListener(listener);
     }
 
     public void update()
@@ -104,11 +111,13 @@ public class Board
         String word = getWord();
         if ("".equals(word))
         {
+            gameEvent.fire(this,GameEvents.GAME_EVENT_WORD_EMPTY);
             boom.addMessage("eh?");
             return;
         }
         if (usedWords.contains(word))
         {
+            gameEvent.fire(this,GameEvents.GAME_EVENT_WORD_ALREADY_USED);
             boom.addMessage("Used");
             return;
         }
@@ -117,11 +126,13 @@ public class Board
             int points = tray.getScore();
             boom.addMessage(Integer.toString(points));
             score = score + points;
+            gameEvent.fire(this,GameEvents.GAME_EVENT_WORD_OK);
         }
         else
         {
             boom.addMessage(Integer.toString(Defines.SCORE_NOT_A_WORD));
             score = score + Defines.SCORE_NOT_A_WORD;
+            gameEvent.fire(this,GameEvents.GAME_EVENT_WORD_DOES_NOT_EXIST);
         }
         usedWords.add(word);
     }

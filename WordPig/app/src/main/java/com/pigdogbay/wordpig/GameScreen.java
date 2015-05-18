@@ -9,15 +9,16 @@ import com.pigdogbay.library.games.BitmapButton;
 import com.pigdogbay.library.games.FrameBuffer;
 import com.pigdogbay.library.games.GameView;
 import com.pigdogbay.library.games.ObjectTouchHandler;
-import com.pigdogbay.library.games.SoundManager;
 import com.pigdogbay.wordpig.model.Board;
+import com.pigdogbay.wordpig.model.GameEvent;
+import com.pigdogbay.wordpig.model.GameEvents;
 import com.pigdogbay.wordpig.model.Tile;
 import com.pigdogbay.wordpig.model.TouchTile;
 
 /**
  * Created by Mark on 01/04/2015.
  */
-public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener {
+public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener, GameEvent.IGameEventListener {
 
     private FrameBuffer _Buffer;
     private ObjectTouchHandler _TouchHandler;
@@ -27,7 +28,10 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener 
     private Assets _Assets;
 
     public void setAssets(Assets assets){_Assets=assets;}
-    public void setBoard(Board board){ _Board = board;}
+    public void setBoard(Board board){
+        _Board = board;
+        _Board.addEventListener(this);
+    }
     public void setTouchHandler(ObjectTouchHandler touch) {
         _TouchHandler = touch;
     }
@@ -153,5 +157,14 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener 
     }
 
 
-
+    @Override
+    public void onGameEvent(Object sender, int id) {
+        switch (id){
+            case GameEvents.GAME_EVENT_WORD_OK:
+                _Assets.SoundManager.play(R.raw.coin,0.1f);
+                break;
+            default:
+                _Assets.SoundManager.play(R.raw.laser,0.2f);
+        }
+    }
 }
