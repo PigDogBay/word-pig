@@ -57,7 +57,7 @@ public class MainActivity extends Activity implements GameView.IGame, Observable
         gameView.setShowFPS(true);
         gameView.setOnTouchListener(touchHandler);
         setContentView(gameView);
-        showGameOver();
+        showHome();
     }
 
     @Override
