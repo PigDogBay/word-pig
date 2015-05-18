@@ -24,6 +24,9 @@ public class HomeScreen implements GameView.IGame, BitmapButton.OnClickListener 
     private List<Tile> tiles;
 
     private BitmapButton _GoButton;
+    private Assets assets;
+
+    public void setAssets(Assets assets){this.assets=assets;}
 
 
     public void setTouchHandler(ObjectTouchHandler touch) {
@@ -34,10 +37,11 @@ public class HomeScreen implements GameView.IGame, BitmapButton.OnClickListener 
     }
     public void setScreen(Screen screen){this.screen = screen;}
 
-    public HomeScreen()
-    {
+    public HomeScreen() {
+    }
+    public void initialize(){
         _GoButton = new BitmapButton();
-        _GoButton.setBitmaps(Assets.GoButton, Assets.GoButtonPressed, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y);
+        _GoButton.setBitmaps(assets.GoButton, assets.GoButtonPressed, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y);
         _GoButton.setOnClickListener(this);
         tiles = new ArrayList<Tile>();
         addTiles("word", Defines.HOME_TILES_LINE1_Y);
@@ -72,7 +76,7 @@ public class HomeScreen implements GameView.IGame, BitmapButton.OnClickListener 
         Point point = new Point();
         for (Tile t : tiles) {
             getTileAtlasCoords(point,t);
-            buffer.draw(Assets.TilesAtlas, t.x, t.y, point.x, point.y, Defines.TILE_WIDTH, Defines.TILE_HEIGHT);
+            buffer.draw(assets.TilesAtlas, t.x, t.y, point.x, point.y, Defines.TILE_WIDTH, Defines.TILE_HEIGHT);
         }
     }
 

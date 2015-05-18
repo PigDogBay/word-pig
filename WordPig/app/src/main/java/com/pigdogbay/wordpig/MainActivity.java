@@ -1,27 +1,19 @@
 package com.pigdogbay.wordpig;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.pigdogbay.library.games.AssetsReader;
 import com.pigdogbay.library.games.FrameBuffer;
 import com.pigdogbay.library.games.GameView;
 import com.pigdogbay.library.games.ObjectTouchHandler;
-import com.pigdogbay.library.games.SoundManager;
-import com.pigdogbay.library.utils.LineReader;
 import com.pigdogbay.library.utils.ObservableProperty;
 import com.pigdogbay.wordpig.model.Board;
 import com.pigdogbay.wordpig.model.Screen;
 import com.pigdogbay.wordpig.model.WordChecker;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
 
 
 public class MainActivity extends Activity implements GameView.IGame, ObservableProperty.PropertyChangedObserver<Screen.ScreenState> {
@@ -36,6 +28,7 @@ public class MainActivity extends Activity implements GameView.IGame, Observable
     private ObjectTouchHandler touchHandler;
     private Screen screen;
     private Board board;
+    private Assets assets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +48,8 @@ public class MainActivity extends Activity implements GameView.IGame, Observable
         touchHandler.setYScale(yScale);
 
         //Load game
-        Assets.load(this);
+        this.assets = new Assets();
+        this.assets.load(this);
         createModel();
         createScreens();
 
@@ -90,25 +84,29 @@ public class MainActivity extends Activity implements GameView.IGame, Observable
         gameScreen = new GameScreen();
         gameScreen.setTouchHandler(touchHandler);
         gameScreen.setBuffer(buffer);
-        gameScreen.setSoundManager(Assets.SoundManager);
+        gameScreen.setAssets(this.assets);
+        gameScreen.initilize();
 
         homeScreen = new HomeScreen();
         homeScreen.setTouchHandler(touchHandler);
         homeScreen.setBuffer(buffer);
         homeScreen.setScreen(screen);
+        homeScreen.setAssets(this.assets);
+        homeScreen.initialize();
 
         gameOverScreen = new GameOverScreen();
         gameOverScreen.setTouchHandler(touchHandler);
         gameOverScreen.setBuffer(buffer);
         gameOverScreen.setScreen(screen);
-
+        gameOverScreen.setAssets(this.assets);
+        gameOverScreen.initializie();
     }
 
     private void showGame()
     {
         board = new Board(this.screen);
         board.setTiles("streaming");
-        board.wordChecker = new WordChecker(Assets.wordList);
+        board.wordChecker = new WordChecker(this.assets.wordList);
         gameScreen.setBoard(board);
         touchHandler.clearTouchables();
         gameScreen.registerTouchables();

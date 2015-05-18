@@ -24,10 +24,9 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener 
     private Board _Board;
     private BitmapButton _GoButton, _ClearButton;
     private Paint _TextPaint,_TimerOuterPaint,_TimerInnerPaint, _BoomPaint;
-    //Need a game event system so can fire off sounds
-    private SoundManager _SoundManager;
+    private Assets _Assets;
 
-    public void setSoundManager(SoundManager soundManager){_SoundManager=soundManager;}
+    public void setAssets(Assets assets){_Assets=assets;}
     public void setBoard(Board board){ _Board = board;}
     public void setTouchHandler(ObjectTouchHandler touch) {
         _TouchHandler = touch;
@@ -36,8 +35,9 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener 
         this._Buffer = buffer;
     }
 
-    public GameScreen()
-    {
+    public GameScreen() {
+    }
+    public void initilize(){
         _TextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         _TextPaint.setColor(Color.WHITE);
         _TextPaint.setTextSize(36);
@@ -51,11 +51,11 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener 
         _BoomPaint.setTextSize(144);
 
         _GoButton = new BitmapButton();
-        _GoButton.setBitmaps(Assets.GoButton, Assets.GoButtonPressed, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y);
+        _GoButton.setBitmaps(_Assets.GoButton, _Assets.GoButtonPressed, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y);
         _GoButton.setOnClickListener(this);
 
         _ClearButton = new BitmapButton();
-        _ClearButton.setBitmaps(Assets.ClearButton, Assets.ClearButtonPressed, Defines.CLEAR_BUTTON_X, Defines.CLEAR_BUTTON_Y);
+        _ClearButton.setBitmaps(_Assets.ClearButton, _Assets.ClearButtonPressed, Defines.CLEAR_BUTTON_X, Defines.CLEAR_BUTTON_Y);
         _ClearButton.setOnClickListener(this);
     }
     public void registerTouchables()
@@ -68,7 +68,6 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener 
             TouchTile touchTile = new TouchTile(t);
             _TouchHandler.add(touchTile);
         }
-        _SoundManager.play(R.raw.coin,0.5f);
     }
 
     //IGame
@@ -82,7 +81,7 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener 
         _Buffer.clear(0);
         final Canvas buffCanvas = _Buffer.getCanvas();
 
-        _Buffer.draw(Assets.WordBench, Defines.WORD_BENCH_X, Defines.WORD_BENCH_Y);
+        _Buffer.draw(_Assets.WordBench, Defines.WORD_BENCH_X, Defines.WORD_BENCH_Y);
         drawButtons();
         drawScore(buffCanvas);
         drawTimer(buffCanvas);
@@ -105,7 +104,7 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener 
         Point point = new Point();
         for (Tile t : _Board.tiles) {
             getTileAtlasCoords(point,t);
-            _Buffer.draw(Assets.TilesAtlas, t.x, t.y, point.x, point.y, Defines.TILE_WIDTH, Defines.TILE_HEIGHT);
+            _Buffer.draw(_Assets.TilesAtlas, t.x, t.y, point.x, point.y, Defines.TILE_WIDTH, Defines.TILE_HEIGHT);
         }
 
     }

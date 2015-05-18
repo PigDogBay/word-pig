@@ -16,40 +16,40 @@ import java.util.List;
  */
 public class Assets {
 
-    public static Bitmap TilesAtlas;
-    public static Bitmap GoButton;
-    public static Bitmap GoButtonPressed;
-    public static Bitmap ClearButton;
-    public static Bitmap ClearButtonPressed;
-    public static Bitmap WordBench;
+    public Bitmap TilesAtlas;
+    public Bitmap GoButton;
+    public Bitmap GoButtonPressed;
+    public Bitmap ClearButton;
+    public Bitmap ClearButtonPressed;
+    public Bitmap WordBench;
 
-    public static List<String> wordList;
-    public static SoundManager SoundManager;
+    public List<String> wordList;
+    public SoundManager SoundManager;
 
 
 
-    public static void load(Context context)
+    public void load(Context context)
     {
         //Don't close the asset manager, as we will need if onCreate is called again
         AssetsReader assets = new AssetsReader(context);
-        Assets.TilesAtlas =  assets.loadBitmap("tiles.png", Bitmap.Config.RGB_565);
-        Assets.GoButton =  assets.loadBitmap("go_button.png", Bitmap.Config.RGB_565);
-        Assets.GoButtonPressed =  assets.loadBitmap("go_button_pressed.png", Bitmap.Config.RGB_565);
-        Assets.ClearButton =  assets.loadBitmap("clear_button.png", Bitmap.Config.RGB_565);
-        Assets.ClearButtonPressed =  assets.loadBitmap("clear_button_pressed.png", Bitmap.Config.RGB_565);
-        Assets.WordBench =  assets.loadBitmap("word_bench.png", Bitmap.Config.RGB_565);
+        this.TilesAtlas =  assets.loadBitmap("tiles.png", Bitmap.Config.RGB_565);
+        this.GoButton =  assets.loadBitmap("go_button.png", Bitmap.Config.RGB_565);
+        this.GoButtonPressed =  assets.loadBitmap("go_button_pressed.png", Bitmap.Config.RGB_565);
+        this.ClearButton =  assets.loadBitmap("clear_button.png", Bitmap.Config.RGB_565);
+        this.ClearButtonPressed =  assets.loadBitmap("clear_button_pressed.png", Bitmap.Config.RGB_565);
+        this.WordBench =  assets.loadBitmap("word_bench.png", Bitmap.Config.RGB_565);
 
         try {
-            Assets.wordList =  LineReader.Read(context, R.raw.standard);
+            this.wordList =  LineReader.Read(context, R.raw.standard);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Assets.SoundManager = new SoundManager();
-        Assets.SoundManager.initialize();
+        this.SoundManager = new SoundManager();
+        this.SoundManager.initialize();
         ArrayList<Integer> sounds = new ArrayList<Integer>();
         sounds.add(R.raw.coin);
         sounds.add(R.raw.powerup);
         sounds.add(R.raw.laser);
-        Assets.SoundManager.loadSounds(context, sounds);
+        this.SoundManager.loadSounds(context, sounds);
     }
 }

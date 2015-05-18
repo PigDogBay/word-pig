@@ -23,6 +23,9 @@ public class GameOverScreen implements GameView.IGame, BitmapButton.OnClickListe
     private ObjectTouchHandler touchHandler;
     private List<Tile> tiles;
     private BitmapButton _GoButton;
+    private Assets _Assets;
+
+    public void setAssets(Assets assets){_Assets=assets;}
 
 
     public void setTouchHandler(ObjectTouchHandler touch) {
@@ -33,10 +36,11 @@ public class GameOverScreen implements GameView.IGame, BitmapButton.OnClickListe
     }
     public void setScreen(Screen screen){this.screen = screen;}
 
-    public GameOverScreen()
-    {
+    public GameOverScreen() {
+    }
+    public void initializie(){
         _GoButton = new BitmapButton();
-        _GoButton.setBitmaps(Assets.GoButton, Assets.GoButtonPressed, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y);
+        _GoButton.setBitmaps(_Assets.GoButton, _Assets.GoButtonPressed, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y);
         _GoButton.setOnClickListener(this);
         tiles = new ArrayList<Tile>();
         addTiles("game", Defines.HOME_TILES_LINE1_Y);
@@ -69,7 +73,7 @@ public class GameOverScreen implements GameView.IGame, BitmapButton.OnClickListe
         Point point = new Point();
         for (Tile t : tiles) {
             getTileAtlasCoords(point,t);
-            buffer.draw(Assets.TilesAtlas, t.x, t.y, point.x, point.y, Defines.TILE_WIDTH, Defines.TILE_HEIGHT);
+            buffer.draw(_Assets.TilesAtlas, t.x, t.y, point.x, point.y, Defines.TILE_WIDTH, Defines.TILE_HEIGHT);
         }
     }
 
