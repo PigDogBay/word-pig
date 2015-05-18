@@ -168,7 +168,7 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener,
         switch (id){
             case GameEvents.GAME_EVENT_WORD_OK:
                 _Assets.SoundManager.play(R.raw.coin,0.1f);
-                _Boom.addMessage("+10");
+                _Boom.addMessage("+"+Integer.toString(_Board.pointsScored)+"pts");
                 break;
             case GameEvents.GAME_EVENT_WORD_DOES_NOT_EXIST:
                 _Assets.SoundManager.play(R.raw.laser,0.2f);

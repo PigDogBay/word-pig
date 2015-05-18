@@ -4,7 +4,6 @@ import com.pigdogbay.library.games.Timer;
 import com.pigdogbay.wordpig.Defines;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +26,7 @@ public class Board
     public int level;
     public float time;
     public WordChecker wordChecker;
+    public int pointsScored;
     private Tray tray;
     private List<String> usedWords;
     private GameState gameState;
@@ -38,6 +38,7 @@ public class Board
         this.screen = screen;
         tiles = new ArrayList<Tile>();
         score = 0;
+        pointsScored =0;
         level = 42;
         time = Defines.TIMER_MAX_VAL;
         tray = new Tray();
@@ -108,18 +109,18 @@ public class Board
         String word = getWord();
         if ("".equals(word))
         {
-            gameEvent.fire(this,GameEvents.GAME_EVENT_WORD_EMPTY);
+            gameEvent.fire(this, GameEvents.GAME_EVENT_WORD_EMPTY);
             return;
         }
         if (usedWords.contains(word))
         {
-            gameEvent.fire(this,GameEvents.GAME_EVENT_WORD_ALREADY_USED);
+            gameEvent.fire(this, GameEvents.GAME_EVENT_WORD_ALREADY_USED);
             return;
         }
         if (wordChecker.isWord(word))
         {
-            int points = tray.getScore();
-            score = score + points;
+            pointsScored = tray.getScore();
+            score = score + pointsScored;
             gameEvent.fire(this,GameEvents.GAME_EVENT_WORD_OK);
         }
         else
@@ -139,7 +140,7 @@ public class Board
             t.y = Defines.TILE_POOL_Y;
             x = x + Defines.TILE_POOL_X_SPACING+Defines.TILE_WIDTH;
         }
-        gameEvent.fire(this,GameEvents.GAME_EVENT_CLEAR);
+        gameEvent.fire(this, GameEvents.GAME_EVENT_CLEAR);
     }
 
     private String getWord()
