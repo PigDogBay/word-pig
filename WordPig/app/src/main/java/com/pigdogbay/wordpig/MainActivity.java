@@ -31,7 +31,6 @@ public class MainActivity extends Activity implements GameView.IGame, Observable
     private GameScreen gameScreen;
     private HomeScreen homeScreen;
     private GameOverScreen gameOverScreen;
-    private SoundManager _SoundManager;
 
     private FrameBuffer buffer;
     private ObjectTouchHandler touchHandler;
@@ -56,7 +55,7 @@ public class MainActivity extends Activity implements GameView.IGame, Observable
         touchHandler.setYScale(yScale);
 
         //Load game
-        loadResources();
+        Assets.load(this);
         createModel();
         createScreens();
 
@@ -79,32 +78,6 @@ public class MainActivity extends Activity implements GameView.IGame, Observable
         gameView.pause();
     }
 
-    private void loadResources()
-    {
-        //Don't close the asset manager, as we will need if onCreate is called again
-        AssetsReader assets = new AssetsReader(this);
-        Assets.TilesAtlas =  assets.loadBitmap("tiles.png", Bitmap.Config.RGB_565);
-        Assets.GoButton =  assets.loadBitmap("go_button.png", Bitmap.Config.RGB_565);
-        Assets.GoButtonPressed =  assets.loadBitmap("go_button_pressed.png", Bitmap.Config.RGB_565);
-        Assets.ClearButton =  assets.loadBitmap("clear_button.png", Bitmap.Config.RGB_565);
-        Assets.ClearButtonPressed =  assets.loadBitmap("clear_button_pressed.png", Bitmap.Config.RGB_565);
-        Assets.WordBench =  assets.loadBitmap("word_bench.png", Bitmap.Config.RGB_565);
-
-        try {
-            Assets.wordList =  LineReader.Read(this,R.raw.standard);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        _SoundManager = new SoundManager();
-        _SoundManager.initialize();
-        ArrayList<Integer> sounds = new ArrayList<Integer>();
-        sounds.add(R.raw.coin);
-        sounds.add(R.raw.powerup);
-        sounds.add(R.raw.laser);
-        _SoundManager.loadSounds(this, sounds);
-    }
-
     private void createModel()
     {
         screen = new Screen();
@@ -117,7 +90,7 @@ public class MainActivity extends Activity implements GameView.IGame, Observable
         gameScreen = new GameScreen();
         gameScreen.setTouchHandler(touchHandler);
         gameScreen.setBuffer(buffer);
-        gameScreen.setSoundManager(_SoundManager);
+        gameScreen.setSoundManager(Assets.SoundManager);
 
         homeScreen = new HomeScreen();
         homeScreen.setTouchHandler(touchHandler);
