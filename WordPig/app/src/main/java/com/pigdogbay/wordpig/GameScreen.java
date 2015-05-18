@@ -10,6 +10,7 @@ import com.pigdogbay.library.games.FrameBuffer;
 import com.pigdogbay.library.games.GameView;
 import com.pigdogbay.library.games.ObjectTouchHandler;
 import com.pigdogbay.wordpig.model.Board;
+import com.pigdogbay.wordpig.model.Boom;
 import com.pigdogbay.wordpig.model.GameEvent;
 import com.pigdogbay.wordpig.model.GameEvents;
 import com.pigdogbay.wordpig.model.Tile;
@@ -26,6 +27,8 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener,
     private BitmapButton _GoButton, _ClearButton;
     private Paint _TextPaint,_TimerOuterPaint,_TimerInnerPaint, _BoomPaint;
     private Assets _Assets;
+    private Boom _Boom;
+
 
     public void setAssets(Assets assets){_Assets=assets;}
     public void setBoard(Board board){
@@ -41,7 +44,7 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener,
 
     public GameScreen() {
     }
-    public void initilize(){
+    public void initialize(){
         _TextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         _TextPaint.setColor(Color.WHITE);
         _TextPaint.setTextSize(36);
@@ -61,6 +64,8 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener,
         _ClearButton = new BitmapButton();
         _ClearButton.setBitmaps(_Assets.ClearButton, _Assets.ClearButtonPressed, Defines.CLEAR_BUTTON_X, Defines.CLEAR_BUTTON_Y);
         _ClearButton.setOnClickListener(this);
+
+        _Boom = new Boom();
     }
     public void registerTouchables()
     {
@@ -78,6 +83,7 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener,
     @Override
     public void Update() {
         _Board.update();
+        _Boom.update();
     }
 
     @Override
@@ -96,10 +102,10 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener,
     }
     private void drawBoom(Canvas buffCanvas)
     {
-        if (_Board.boom.isMessageAvailable)
+        if (_Boom.isMessageAvailable)
         {
-            final float y = Defines.BOOM_Y - (float)(_Board.boom.count*10);
-            buffCanvas.drawText(_Board.boom.latestMessage, Defines.BOOM_X, y, _BoomPaint);
+            final float y = Defines.BOOM_Y - (float)(_Boom.count*10);
+            buffCanvas.drawText(_Boom.latestMessage, Defines.BOOM_X, y, _BoomPaint);
 
         }
     }
@@ -162,9 +168,29 @@ public class GameScreen implements GameView.IGame, BitmapButton.OnClickListener,
         switch (id){
             case GameEvents.GAME_EVENT_WORD_OK:
                 _Assets.SoundManager.play(R.raw.coin,0.1f);
+                _Boom.addMessage("+10");
                 break;
-            default:
+            case GameEvents.GAME_EVENT_WORD_DOES_NOT_EXIST:
                 _Assets.SoundManager.play(R.raw.laser,0.2f);
+                _Boom.addMessage(Integer.toString(Defines.SCORE_NOT_A_WORD)+"pts");
+                break;
+            case GameEvents.GAME_EVENT_WORD_ALREADY_USED:
+                _Assets.SoundManager.play(R.raw.laser,0.2f);
+                _Boom.addMessage("Used");
+                break;
+            case GameEvents.GAME_EVENT_WORD_EMPTY:
+                _Assets.SoundManager.play(R.raw.laser,0.2f);
+                _Boom.addMessage("eh?");
+                break;
+            case GameEvents.GAME_EVENT_GET_READY:
+                _Boom.addMessage("Get Ready!");
+                break;
+            case GameEvents.GAME_EVENT_CLEAR:
+                _Boom.addMessage("CLEAR");
+                break;
+            case GameEvents.GAME_EVENT_TIMES_UP:
+                _Boom.addMessage("Times Up!");
+                break;
         }
     }
 }

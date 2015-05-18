@@ -26,7 +26,6 @@ public class Board
     public int score;
     public int level;
     public float time;
-    public Boom boom;
     public WordChecker wordChecker;
     private Tray tray;
     private List<String> usedWords;
@@ -41,7 +40,6 @@ public class Board
         score = 0;
         level = 42;
         time = Defines.TIMER_MAX_VAL;
-        boom = new Boom();
         tray = new Tray();
         usedWords = new ArrayList<String>();
         gameState = GameState.Initialize;
@@ -56,12 +54,11 @@ public class Board
 
     public void update()
     {
-        boom.update();
         switch (gameState)
         {
             case Initialize:
-                boom.addMessage("Get Ready!");
                 gameState = GameState.FirstWord;
+                gameEvent.fire(this,GameEvents.GAME_EVENT_GET_READY);
                 break;
             case FirstWord:
                 if (usedWords.size()>0)
@@ -73,9 +70,9 @@ public class Board
                 time--;
                 if (time==0)
                 {
-                    boom.addMessage("Times Up");
                     timer.reset(Defines.TIMES_UP_DURATION);
                     gameState = GameState.TimesUp;
+                    gameEvent.fire(this,GameEvents.GAME_EVENT_TIMES_UP);
                 }
                 break;
             case TimesUp:
@@ -112,25 +109,21 @@ public class Board
         if ("".equals(word))
         {
             gameEvent.fire(this,GameEvents.GAME_EVENT_WORD_EMPTY);
-            boom.addMessage("eh?");
             return;
         }
         if (usedWords.contains(word))
         {
             gameEvent.fire(this,GameEvents.GAME_EVENT_WORD_ALREADY_USED);
-            boom.addMessage("Used");
             return;
         }
         if (wordChecker.isWord(word))
         {
             int points = tray.getScore();
-            boom.addMessage(Integer.toString(points));
             score = score + points;
             gameEvent.fire(this,GameEvents.GAME_EVENT_WORD_OK);
         }
         else
         {
-            boom.addMessage(Integer.toString(Defines.SCORE_NOT_A_WORD));
             score = score + Defines.SCORE_NOT_A_WORD;
             gameEvent.fire(this,GameEvents.GAME_EVENT_WORD_DOES_NOT_EXIST);
         }
@@ -146,7 +139,7 @@ public class Board
             t.y = Defines.TILE_POOL_Y;
             x = x + Defines.TILE_POOL_X_SPACING+Defines.TILE_WIDTH;
         }
-        boom.addMessage("CLEAR");
+        gameEvent.fire(this,GameEvents.GAME_EVENT_CLEAR);
     }
 
     private String getWord()

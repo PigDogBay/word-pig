@@ -85,7 +85,7 @@ public class MainActivity extends Activity implements GameView.IGame, Observable
         gameScreen.setTouchHandler(touchHandler);
         gameScreen.setBuffer(buffer);
         gameScreen.setAssets(this.assets);
-        gameScreen.initilize();
+        gameScreen.initialize();
 
         homeScreen = new HomeScreen();
         homeScreen.setTouchHandler(touchHandler);
