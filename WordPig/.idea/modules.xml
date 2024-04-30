@@ -7,6 +7,10 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/WordPig.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/WordPig.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/WordPig.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/WordPig.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/WordPig.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/WordPig.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/2033383728/WordPig.lib.iml" filepath="$PROJECT_DIR$/.idea/modules/2033383728/WordPig.lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/2033383728/WordPig.lib.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/2033383728/WordPig.lib.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/2033383728/WordPig.lib.main.iml" filepath="$PROJECT_DIR$/.idea/modules/2033383728/WordPig.lib.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/2033383728/WordPig.lib.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/2033383728/WordPig.lib.unitTest.iml" />
     </modules>
   </component>
 </project>
