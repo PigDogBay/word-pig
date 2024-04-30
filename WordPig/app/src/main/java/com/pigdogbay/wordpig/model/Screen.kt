@@ -1,24 +1,20 @@
-package com.pigdogbay.wordpig.model;
+package com.pigdogbay.wordpig.model
 
-import com.pigdogbay.lib.utils.ObservableProperty;
+import com.pigdogbay.lib.utils.ObservableProperty
 
 /**
  * Created by Mark on 07/04/2015.
  */
-public class Screen
-{
-    public enum ScreenState
-    {
+class Screen {
+    enum class ScreenState {
         Home,
         Game,
         GameOver
     }
 
-    public ObservableProperty<ScreenState> screenStateObserver;
+    var screenStateObserver: ObservableProperty<ScreenState?>
 
-    public Screen()
-    {
-        screenStateObserver = new ObservableProperty<ScreenState>(ScreenState.Home);
+    init {
+        screenStateObserver = ObservableProperty(ScreenState.Home)
     }
-
 }

@@ -1,100 +1,105 @@
-package com.pigdogbay.wordpig;
+package com.pigdogbay.wordpig
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Point;
-
-import com.pigdogbay.wordpig.model.Screen;
-import com.pigdogbay.wordpig.model.Tile;
-
-import java.util.ArrayList;
-import java.util.List;
-import com.pigdogbay.lib.games.*;
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Point
+import com.pigdogbay.lib.games.BitmapButton
+import com.pigdogbay.lib.games.FrameBuffer
+import com.pigdogbay.lib.games.GameView.IGame
+import com.pigdogbay.lib.games.ObjectTouchHandler
+import com.pigdogbay.wordpig.model.Screen
+import com.pigdogbay.wordpig.model.Tile
 
 /**
  * Created by Mark on 07/04/2015.
  */
-public class GameOverScreen implements GameView.IGame, BitmapButton.OnClickListener {
-    private Screen screen;
-    private FrameBuffer buffer;
-    private ObjectTouchHandler touchHandler;
-    private List<Tile> tiles;
-    private BitmapButton _GoButton;
-    private Assets _Assets;
-
-    public void setAssets(Assets assets){_Assets=assets;}
-
-
-    public void setTouchHandler(ObjectTouchHandler touch) {
-        this.touchHandler = touch;
-    }
-    public void setBuffer(FrameBuffer buffer) {
-        this.buffer = buffer;
-    }
-    public void setScreen(Screen screen){this.screen = screen;}
-
-    public GameOverScreen() {
-    }
-    public void initializie(){
-        _GoButton = new BitmapButton();
-        _GoButton.setBitmaps(_Assets.GoButton, _Assets.GoButtonPressed, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y);
-        _GoButton.setOnClickListener(this);
-        tiles = new ArrayList<Tile>();
-        addTiles("game", Defines.HOME_TILES_LINE1_Y);
-        addTiles("over", Defines.HOME_TILES_LINE2_Y);    }
-
-    @Override
-    public void Update() {
-
+class GameOverScreen : IGame, BitmapButton.OnClickListener {
+    private var screen: Screen? = null
+    private var buffer: FrameBuffer? = null
+    private var touchHandler: ObjectTouchHandler? = null
+    private var tiles: MutableList<Tile>? = null
+    private var _GoButton: BitmapButton? = null
+    private var _Assets: Assets? = null
+    fun setAssets(assets: Assets?) {
+        _Assets = assets
     }
 
-    @Override
-    public void Render(Canvas c) {
-        buffer.clear(Color.BLUE);
-        drawTiles();
-        _GoButton.draw(buffer);
-        buffer.scaleToFit(c);
+    fun setTouchHandler(touch: ObjectTouchHandler?) {
+        touchHandler = touch
     }
 
-    public void registerTouchables() {
-        touchHandler.add(_GoButton);
+    fun setBuffer(buffer: FrameBuffer?) {
+        this.buffer = buffer
     }
 
-    @Override
-    public void onClick(Object sender) {
-        screen.screenStateObserver.setValue(Screen.ScreenState.Home);
+    fun setScreen(screen: Screen?) {
+        this.screen = screen
     }
 
-    private void drawTiles()
-    {
-        Point point = new Point();
-        for (Tile t : tiles) {
-            getTileAtlasCoords(point,t);
-            buffer.draw(_Assets.TilesAtlas, t.x, t.y, point.x, point.y, Defines.TILE_WIDTH, Defines.TILE_HEIGHT);
+    fun initializie() {
+        _GoButton = BitmapButton()
+        _GoButton!!.setBitmaps(
+            _Assets!!.GoButton,
+            _Assets!!.GoButtonPressed,
+            Defines.GO_BUTTON_X,
+            Defines.GO_BUTTON_Y
+        )
+        _GoButton!!.setOnClickListener(this)
+        tiles = ArrayList()
+        addTiles("game", Defines.HOME_TILES_LINE1_Y)
+        addTiles("over", Defines.HOME_TILES_LINE2_Y)
+    }
+
+    override fun Update() {}
+    override fun Render(c: Canvas?) {
+        buffer!!.clear(Color.BLUE)
+        drawTiles()
+        _GoButton!!.draw(buffer!!)
+        buffer!!.scaleToFit(c!!)
+    }
+
+    fun registerTouchables() {
+        touchHandler!!.add(_GoButton!!)
+    }
+
+    override fun onClick(sender: Any?) {
+        screen!!.screenStateObserver.setValue(Screen.ScreenState.Home)
+    }
+
+    private fun drawTiles() {
+        val point = Point()
+        for (t in tiles!!) {
+            getTileAtlasCoords(point, t)
+            buffer!!.draw(
+                _Assets!!.TilesAtlas,
+                t.x,
+                t.y,
+                point.x,
+                point.y,
+                Defines.TILE_WIDTH,
+                Defines.TILE_HEIGHT
+            )
         }
     }
 
-    private void addTiles(String newLetters, int y)
-    {
-        int n = newLetters.length();
+    private fun addTiles(newLetters: String, y: Int) {
+        val n = newLetters.length
         //center word
-        int x = (Defines.BOARD_WIDTH - n*Defines.TILE_WIDTH - (n-1)*Defines.TILE_POOL_X_SPACING)/2;
-        for (char c : newLetters.toCharArray())
-        {
-            tiles.add(new Tile(c,x,y));
-            x = x +Defines.TILE_POOL_X_SPACING+Defines.TILE_WIDTH;
+        var x =
+            (Defines.BOARD_WIDTH - n * Defines.TILE_WIDTH - (n - 1) * Defines.TILE_POOL_X_SPACING) / 2
+        for (c in newLetters.toCharArray()) {
+            tiles!!.add(Tile(c.code, x, y))
+            x = x + Defines.TILE_POOL_X_SPACING + Defines.TILE_WIDTH
         }
     }
 
-    private void getTileAtlasCoords(Point p,Tile t)
-    {
-        int i = t.letter-'a';
-        p.y = 0;
-        if (i>=13)
-        {
-            p.y = Defines.TILE_HEIGHT;
-            i=i-13;
+    private fun getTileAtlasCoords(p: Point, t: Tile) {
+        var i = t.letter - 'a'.code
+        p.y = 0
+        if (i >= 13) {
+            p.y = Defines.TILE_HEIGHT
+            i = i - 13
         }
-        p.x = i*Defines.TILE_WIDTH;
+        p.x = i * Defines.TILE_WIDTH
     }
 }

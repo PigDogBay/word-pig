@@ -1,67 +1,48 @@
-package com.pigdogbay.wordpig.model;
+package com.pigdogbay.wordpig.model
 
-import android.util.Log;
-
-import com.pigdogbay.wordpig.Defines;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import com.pigdogbay.wordpig.Defines
+import java.util.Collections
 
 /**
  * Created by Mark on 07/04/2015.
  */
-public class Tray
-{
-    private StringBuilder buffer;
-    private List<Tile> trayTiles;
+class Tray {
+    private val buffer: StringBuilder
+    private val trayTiles: MutableList<Tile>
 
-    public Tray()
-    {
-        trayTiles = new ArrayList<Tile>();
-        buffer = new StringBuilder();
+    init {
+        trayTiles = ArrayList()
+        buffer = StringBuilder()
     }
 
-    public void setTilesIfInTray(List<Tile> tiles)
-    {
-        trayTiles.clear();
-        for (Tile t : tiles)
-        {
-            if (t.y> Defines.TRAY_MIN_Y && t.y<Defines.TRAY_MAX_Y){
-                trayTiles.add(t);
+    fun setTilesIfInTray(tiles: List<Tile>) {
+        trayTiles.clear()
+        for (t in tiles) {
+            if (t.y > Defines.TRAY_MIN_Y && t.y < Defines.TRAY_MAX_Y) {
+                trayTiles.add(t)
             }
         }
     }
 
-    public void sortTilesByPosition()
-    {
-        Collections.sort(trayTiles, new Comparator<Tile>() {
-            @Override
-            public int compare(Tile lhs, Tile rhs) {
-                return lhs.x - rhs.x;
+    fun sortTilesByPosition() {
+        Collections.sort(trayTiles) { lhs, rhs -> lhs.x - rhs.x }
+    }
+
+    val score: Int
+        get() {
+            var score = 0
+            for (t in trayTiles) {
+                val index = t.letter - 'a'.code
+                score = score + Defines.SCORE_LETTER[index]
             }
-        });
-    }
-
-    public int getScore()
-    {
-        int score = 0;
-        for (Tile t : trayTiles)
-        {
-            int index = t.letter-'a';
-            score = score + Defines.SCORE_LETTER[index];
+            return score
         }
-        return score;
-    }
 
-    @Override
-    public String toString() {
-        buffer.setLength(0);
-        for (Tile t : trayTiles)
-        {
-            buffer.append((char) t.letter);
+    override fun toString(): String {
+        buffer.setLength(0)
+        for (t in trayTiles) {
+            buffer.append(t.letter.toChar())
         }
-        return buffer.toString();
+        return buffer.toString()
     }
 }

@@ -1,43 +1,34 @@
-package com.pigdogbay.wordpig.model;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.pigdogbay.wordpig.model
 
 /**
  * Created by Mark on 18/05/2015.
  */
-public class GameEvent
-{
-    public interface IGameEventListener
-    {
-        void onGameEvent(Object sender, int id);
+class GameEvent {
+    interface IGameEventListener {
+        fun onGameEvent(sender: Any, id: Int)
     }
 
-    List<IGameEventListener> _Listeners;
+    var _Listeners: MutableList<IGameEventListener>
 
-    public GameEvent(){
-        _Listeners = new ArrayList<IGameEventListener>();
+    init {
+        _Listeners = ArrayList()
     }
 
-    public void addListener(IGameEventListener listener)
-    {
-        _Listeners.add(listener);
-    }
-    public void removeListener(IGameEventListener listener)
-    {
-        _Listeners.remove(listener);
+    fun addListener(listener: IGameEventListener) {
+        _Listeners.add(listener)
     }
 
-    public void removeAll()
-    {
-        _Listeners.clear();
+    fun removeListener(listener: IGameEventListener) {
+        _Listeners.remove(listener)
     }
 
-    public void fire(Object sender, int id)
-    {
-        for (IGameEventListener listener : _Listeners){
-            listener.onGameEvent(sender,id);
+    fun removeAll() {
+        _Listeners.clear()
+    }
+
+    fun fire(sender: Any?, id: Int) {
+        for (listener in _Listeners) {
+            listener.onGameEvent(sender!!, id)
         }
     }
-
 }

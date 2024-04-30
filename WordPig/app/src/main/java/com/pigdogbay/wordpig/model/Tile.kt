@@ -1,17 +1,8 @@
-package com.pigdogbay.wordpig.model;
+package com.pigdogbay.wordpig.model
+
+import kotlin.concurrent.Volatile
 
 /**
  * Created by Mark on 01/04/2015.
  */
-public class Tile
-{
-    public int letter;
-    public volatile int x,y;
-
-    public Tile(int letter, int x, int y)
-    {
-        this.letter = letter;
-        this.x = x;
-        this.y = y;
-    }
-}
+class Tile(var letter: Int, @field:Volatile var x: Int, @field:Volatile var y: Int)

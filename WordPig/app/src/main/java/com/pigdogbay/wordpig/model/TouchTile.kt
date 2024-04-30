@@ -1,52 +1,35 @@
-package com.pigdogbay.wordpig.model;
+package com.pigdogbay.wordpig.model
 
-import com.pigdogbay.wordpig.Defines;
-import com.pigdogbay.lib.games.*;
+import com.pigdogbay.lib.games.ObjectTouchHandler.ITouchable
+import com.pigdogbay.lib.games.ObjectTouchHandler.TouchState
+import com.pigdogbay.wordpig.Defines
 
 /**
  * Created by Mark on 01/04/2015.
  */
-public class TouchTile implements ObjectTouchHandler.ITouchable
-{
-    public Tile tile;
-
-    public TouchTile(Tile tile)
-    {
-        this.tile = tile;
-    }
-
-    @Override
-    public boolean contains(int x, int y) {
-        int tx = tile.x;
-        int ty = tile.y;
-        if (x>tx && y>ty)
-        {
-            tx = tx + Defines.TILE_WIDTH;
-            if (x<tx)
-            {
-                ty = ty+Defines.TILE_HEIGHT;
-                return y<ty;
+class TouchTile(var tile: Tile) : ITouchable {
+    override fun contains(x: Int, y: Int): Boolean {
+        var tx = tile.x
+        var ty = tile.y
+        if (x > tx && y > ty) {
+            tx = tx + Defines.TILE_WIDTH
+            if (x < tx) {
+                ty = ty + Defines.TILE_HEIGHT
+                return y < ty
             }
         }
-        return false;
+        return false
     }
 
-    @Override
-    public void setTouchState(ObjectTouchHandler.TouchState state, int x, int y) {
-        switch (state)
-        {
-            case None:
-                break;
-            case Down:
-            case DragInside:
-            case DragOutside:
-            case UpInside:
-            case UpOutside:
-                tile.x = x-Defines.TILE_WIDTH/2;
-                tile.y = y-Defines.TILE_HEIGHT/2;
-                break;
-            case Cancel:
-                break;
+    override fun setTouchState(state: TouchState, x: Int, y: Int) {
+        when (state) {
+            TouchState.None -> {}
+            TouchState.Down, TouchState.DragInside, TouchState.DragOutside, TouchState.UpInside, TouchState.UpOutside -> {
+                tile.x = x - Defines.TILE_WIDTH / 2
+                tile.y = y - Defines.TILE_HEIGHT / 2
+            }
+
+            TouchState.Cancel -> {}
         }
     }
 }

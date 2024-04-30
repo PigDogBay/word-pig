@@ -1,49 +1,37 @@
-package com.pigdogbay.wordpig.model;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.pigdogbay.wordpig.model
 
 /**
  * Created by Mark on 07/04/2015.
  */
-public class Boom
-{
-    private List<String> stack;
-    public int count;
-    public String latestMessage;
-    public boolean isMessageAvailable;
+class Boom {
+    private val stack: MutableList<String>
+    var count = 0
+    var latestMessage = ""
+    var isMessageAvailable = false
 
-    public static final int MAX_COUNT = 25;
-
-    public Boom()
-    {
-        stack = new ArrayList<String>();
-        count = 0;
-        latestMessage="";
-        isMessageAvailable = false;
+    init {
+        stack = ArrayList()
     }
 
-    public void addMessage(String message)
-    {
-        stack.add(message);
+    fun addMessage(message: String) {
+        stack.add(message)
     }
 
-    public void update()
-    {
-        if (isMessageAvailable)
-        {
-            count++;
-            if (count>MAX_COUNT)
-            {
-                isMessageAvailable = false;
+    fun update() {
+        if (isMessageAvailable) {
+            count++
+            if (count > MAX_COUNT) {
+                isMessageAvailable = false
             }
+        } else if (stack.size > 0) {
+            latestMessage = stack[0]
+            stack.removeAt(0)
+            count = 0
+            isMessageAvailable = true
         }
-        else if (stack.size()>0)
-        {
-            latestMessage = stack.get(0);
-            stack.remove(0);
-            count=0;
-            isMessageAvailable = true;
-        }
+    }
+
+    companion object {
+        const val MAX_COUNT = 25
     }
 }
