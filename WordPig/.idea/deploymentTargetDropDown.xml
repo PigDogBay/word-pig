@@ -2,6 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="AssetReaderTests">
+        <State />
+      </entry>
       <entry key="WordCheckerTest">
         <State />
       </entry>
