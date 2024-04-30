@@ -3,9 +3,9 @@ package com.pigdogbay.wordpig;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import com.pigdogbay.lib.utils.LineReader;
 import com.pigdogbay.library.games.AssetsReader;
 import com.pigdogbay.library.games.SoundManager;
-import com.pigdogbay.library.utils.LineReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
