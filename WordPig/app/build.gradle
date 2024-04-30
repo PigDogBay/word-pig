@@ -4,7 +4,6 @@ plugins {
 
 android {
     compileSdk 34
-    buildToolsVersion '28.0.2'
 
     defaultConfig {
         applicationId "com.pigdogbay.wordpig"
@@ -29,4 +28,5 @@ android {
 dependencies {
     implementation project(':lib')
     implementation 'androidx.appcompat:appcompat:1.6.1'
+    androidTestImplementation 'junit:junit:4.13.2'
 }
