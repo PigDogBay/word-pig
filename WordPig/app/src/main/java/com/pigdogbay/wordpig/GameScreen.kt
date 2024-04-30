@@ -58,21 +58,9 @@ class GameScreen : IGame, BitmapButton.OnClickListener, IGameEventListener {
         _BoomPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         _BoomPaint!!.color = Color.RED
         _BoomPaint!!.textSize = 144f
-        _GoButton = BitmapButton()
-        _GoButton!!.setBitmaps(
-            _Assets!!.GoButton,
-            _Assets!!.GoButtonPressed,
-            Defines.GO_BUTTON_X,
-            Defines.GO_BUTTON_Y
-        )
+        _GoButton = BitmapButton(_Assets!!.GoButton!!, _Assets!!.GoButtonPressed!!, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
         _GoButton!!.setOnClickListener(this)
-        _ClearButton = BitmapButton()
-        _ClearButton!!.setBitmaps(
-            _Assets!!.ClearButton,
-            _Assets!!.ClearButtonPressed,
-            Defines.CLEAR_BUTTON_X,
-            Defines.CLEAR_BUTTON_Y
-        )
+        _ClearButton = BitmapButton(_Assets!!.ClearButton!!,_Assets!!.ClearButtonPressed!!, Defines.CLEAR_BUTTON_X, Defines.CLEAR_BUTTON_Y)
         _ClearButton!!.setOnClickListener(this)
         _Boom = Boom()
     }

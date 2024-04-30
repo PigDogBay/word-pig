@@ -37,13 +37,7 @@ class GameOverScreen : IGame, BitmapButton.OnClickListener {
     }
 
     fun initializie() {
-        _GoButton = BitmapButton()
-        _GoButton!!.setBitmaps(
-            _Assets!!.GoButton,
-            _Assets!!.GoButtonPressed,
-            Defines.GO_BUTTON_X,
-            Defines.GO_BUTTON_Y
-        )
+        _GoButton = BitmapButton(_Assets!!.GoButton!!,_Assets!!.GoButtonPressed!!, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
         _GoButton!!.setOnClickListener(this)
         tiles = ArrayList()
         addTiles("game", Defines.HOME_TILES_LINE1_Y)

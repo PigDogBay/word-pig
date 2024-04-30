@@ -37,13 +37,7 @@ class HomeScreen : IGame, BitmapButton.OnClickListener {
     }
 
     fun initialize() {
-        _GoButton = BitmapButton()
-        _GoButton!!.setBitmaps(
-            assets!!.GoButton,
-            assets!!.GoButtonPressed,
-            Defines.GO_BUTTON_X,
-            Defines.GO_BUTTON_Y
-        )
+        _GoButton = BitmapButton(assets!!.GoButton!!, assets!!.GoButtonPressed!!,Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
         _GoButton!!.setOnClickListener(this)
         tiles = ArrayList()
         addTiles("word", Defines.HOME_TILES_LINE1_Y)
