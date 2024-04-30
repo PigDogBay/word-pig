@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.pigdogbay.lib.utils.ObservableProperty;
 import com.pigdogbay.library.games.FrameBuffer;
 import com.pigdogbay.library.games.GameView;
 import com.pigdogbay.library.games.ObjectTouchHandler;
-import com.pigdogbay.library.utils.ObservableProperty;
 import com.pigdogbay.wordpig.model.Board;
 import com.pigdogbay.wordpig.model.Screen;
 import com.pigdogbay.wordpig.model.WordChecker;

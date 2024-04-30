@@ -1,6 +1,6 @@
 package com.pigdogbay.wordpig.model;
 
-import com.pigdogbay.library.utils.ObservableProperty;
+import com.pigdogbay.lib.utils.ObservableProperty;
 
 /**
  * Created by Mark on 07/04/2015.
