@@ -1,10 +1,10 @@
 package com.pigdogbay.wordpig.model;
 
-import com.pigdogbay.library.games.Timer;
 import com.pigdogbay.wordpig.Defines;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.pigdogbay.lib.games.*;
 
 /**
  * Created by Mark on 01/04/2015.

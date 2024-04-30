@@ -1,7 +1,7 @@
 package com.pigdogbay.wordpig.model;
 
-import com.pigdogbay.library.games.ObjectTouchHandler;
 import com.pigdogbay.wordpig.Defines;
+import com.pigdogbay.lib.games.*;
 
 /**
  * Created by Mark on 01/04/2015.

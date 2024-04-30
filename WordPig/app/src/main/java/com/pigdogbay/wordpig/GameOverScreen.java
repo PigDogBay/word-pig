@@ -4,15 +4,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 
-import com.pigdogbay.library.games.BitmapButton;
-import com.pigdogbay.library.games.FrameBuffer;
-import com.pigdogbay.library.games.GameView;
-import com.pigdogbay.library.games.ObjectTouchHandler;
 import com.pigdogbay.wordpig.model.Screen;
 import com.pigdogbay.wordpig.model.Tile;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.pigdogbay.lib.games.*;
 
 /**
  * Created by Mark on 07/04/2015.
