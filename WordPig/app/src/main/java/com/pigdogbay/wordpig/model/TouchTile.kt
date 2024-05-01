@@ -1,13 +1,13 @@
 package com.pigdogbay.wordpig.model
 
-import com.pigdogbay.lib.games.ObjectTouchHandler.ITouchable
+import com.pigdogbay.lib.games.ObjectTouchHandler.Touchable
 import com.pigdogbay.lib.games.ObjectTouchHandler.TouchState
 import com.pigdogbay.wordpig.Defines
 
 /**
  * Created by Mark on 01/04/2015.
  */
-class TouchTile(var tile: Tile) : ITouchable {
+class TouchTile(var tile: Tile) : Touchable {
     override fun contains(x: Int, y: Int): Boolean {
         var tx = tile.x
         var ty = tile.y
