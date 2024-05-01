@@ -5,10 +5,16 @@
       <entry key="AssetReaderTests">
         <State />
       </entry>
+      <entry key="ObjectTouchHandlerTest">
+        <State />
+      </entry>
       <entry key="WordCheckerTest">
         <State />
       </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="onTouch1()">
         <State />
       </entry>
     </value>
