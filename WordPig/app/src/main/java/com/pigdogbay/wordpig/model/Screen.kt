@@ -12,9 +12,5 @@ class Screen {
         GameOver
     }
 
-    var screenStateObserver: ObservableProperty<ScreenState?>
-
-    init {
-        screenStateObserver = ObservableProperty(ScreenState.Home)
-    }
+    val screenStateObserver = ObservableProperty(ScreenState.Home)
 }
