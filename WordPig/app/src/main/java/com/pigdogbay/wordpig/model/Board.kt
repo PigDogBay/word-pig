@@ -17,27 +17,17 @@ class Board(var screen: Screen) {
         Exit
     }
 
-    var tiles: MutableList<Tile>
+    val tiles = ArrayList<Tile>()
     var score = 0
     var level = 42
-    var time: Float
+    var time = Defines.TIMER_MAX_VAL
     var wordChecker: WordChecker? = null
     var pointsScored = 0
-    private val tray: Tray
-    private val usedWords: MutableList<String>
-    private var gameState: GameState
-    private val timer: Timer
-    private val gameEvent: GameEvent
-
-    init {
-        tiles = ArrayList()
-        time = Defines.TIMER_MAX_VAL
-        tray = Tray()
-        usedWords = ArrayList()
-        gameState = GameState.Initialize
-        timer = Timer(0)
-        gameEvent = GameEvent()
-    }
+    private val tray = Tray()
+    private val usedWords = ArrayList<String>()
+    private var gameState = GameState.Initialize
+    private val timer = Timer(0)
+    private val gameEvent = GameEvent()
 
     fun addEventListener(listener: IGameEventListener) {
         gameEvent.addListener(listener)
@@ -77,7 +67,7 @@ class Board(var screen: Screen) {
         var x = Defines.TILE_POOL_X
         for (c in newLetters.toCharArray()) {
             tiles.add(Tile(c.code, x, Defines.TILE_POOL_Y))
-            x = x + Defines.TILE_POOL_X_SPACING + Defines.TILE_WIDTH
+            x += Defines.TILE_POOL_X_SPACING + Defines.TILE_WIDTH
         }
     }
 
@@ -97,10 +87,10 @@ class Board(var screen: Screen) {
         }
         if (wordChecker!!.isWord(word)) {
             pointsScored = tray.score
-            score = score + pointsScored
+            score += pointsScored
             gameEvent.fire(this, GameEvents.GAME_EVENT_WORD_OK)
         } else {
-            score = score + Defines.SCORE_NOT_A_WORD
+            score += Defines.SCORE_NOT_A_WORD
             gameEvent.fire(this, GameEvents.GAME_EVENT_WORD_DOES_NOT_EXIST)
         }
         usedWords.add(word)
@@ -111,13 +101,13 @@ class Board(var screen: Screen) {
         for (t in tiles) {
             t.x = x
             t.y = Defines.TILE_POOL_Y
-            x = x + Defines.TILE_POOL_X_SPACING + Defines.TILE_WIDTH
+            x += Defines.TILE_POOL_X_SPACING + Defines.TILE_WIDTH
         }
         gameEvent.fire(this, GameEvents.GAME_EVENT_CLEAR)
     }
 
     private val word: String
-        private get() {
+        get() {
             tray.setTilesIfInTray(tiles)
             tray.sortTilesByPosition()
             return tray.toString()
