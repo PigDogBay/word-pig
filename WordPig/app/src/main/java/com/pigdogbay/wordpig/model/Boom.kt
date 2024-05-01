@@ -4,14 +4,11 @@ package com.pigdogbay.wordpig.model
  * Created by Mark on 07/04/2015.
  */
 class Boom {
-    private val stack: MutableList<String>
+    private val maxCount = 25
+    private val stack = ArrayList<String>()
     var count = 0
     var latestMessage = ""
     var isMessageAvailable = false
-
-    init {
-        stack = ArrayList()
-    }
 
     fun addMessage(message: String) {
         stack.add(message)
@@ -20,7 +17,7 @@ class Boom {
     fun update() {
         if (isMessageAvailable) {
             count++
-            if (count > MAX_COUNT) {
+            if (count > maxCount) {
                 isMessageAvailable = false
             }
         } else if (stack.size > 0) {
@@ -31,7 +28,4 @@ class Boom {
         }
     }
 
-    companion object {
-        const val MAX_COUNT = 25
-    }
 }
