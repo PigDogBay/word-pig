@@ -2,7 +2,7 @@ package com.pigdogbay.wordpig.model
 
 import com.pigdogbay.lib.games.Timer
 import com.pigdogbay.wordpig.Defines
-import com.pigdogbay.wordpig.model.GameEvent.IGameEventListener
+import com.pigdogbay.wordpig.model.GameEvent.GameEventListener
 import com.pigdogbay.wordpig.model.Screen.ScreenState
 
 /**
@@ -29,7 +29,7 @@ class Board(var screen: Screen) {
     private val timer = Timer(0)
     private val gameEvent = GameEvent()
 
-    fun addEventListener(listener: IGameEventListener) {
+    fun addEventListener(listener: GameEventListener) {
         gameEvent.addListener(listener)
     }
 

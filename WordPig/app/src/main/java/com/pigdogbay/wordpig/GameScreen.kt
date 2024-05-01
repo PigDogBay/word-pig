@@ -10,7 +10,7 @@ import com.pigdogbay.lib.games.GameView.Game
 import com.pigdogbay.lib.games.ObjectTouchHandler
 import com.pigdogbay.wordpig.model.Board
 import com.pigdogbay.wordpig.model.Boom
-import com.pigdogbay.wordpig.model.GameEvent.IGameEventListener
+import com.pigdogbay.wordpig.model.GameEvent.GameEventListener
 import com.pigdogbay.wordpig.model.GameEvents
 import com.pigdogbay.wordpig.model.Tile
 import com.pigdogbay.wordpig.model.TouchTile
@@ -18,7 +18,7 @@ import com.pigdogbay.wordpig.model.TouchTile
 /**
  * Created by Mark on 01/04/2015.
  */
-class GameScreen : Game, BitmapButton.OnClickListener, IGameEventListener {
+class GameScreen : Game, BitmapButton.OnClickListener, GameEventListener {
     private var _Buffer: FrameBuffer? = null
     private var _TouchHandler: ObjectTouchHandler? = null
     private var _Board: Board? = null
