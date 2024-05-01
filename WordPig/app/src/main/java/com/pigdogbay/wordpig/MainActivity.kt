@@ -8,7 +8,7 @@ import android.view.Window
 import android.view.WindowManager
 import com.pigdogbay.lib.games.FrameBuffer
 import com.pigdogbay.lib.games.GameView
-import com.pigdogbay.lib.games.GameView.IGame
+import com.pigdogbay.lib.games.GameView.Game
 import com.pigdogbay.lib.games.ObjectTouchHandler
 import com.pigdogbay.lib.utils.ObservableProperty
 import com.pigdogbay.wordpig.model.Board
@@ -16,9 +16,9 @@ import com.pigdogbay.wordpig.model.Screen
 import com.pigdogbay.wordpig.model.Screen.ScreenState
 import com.pigdogbay.wordpig.model.WordChecker
 
-class MainActivity : Activity(), IGame, ObservableProperty.PropertyChangedObserver<ScreenState?> {
+class MainActivity : Activity(), Game, ObservableProperty.PropertyChangedObserver<ScreenState?> {
     private var gameView: GameView? = null
-    private var currentScreen: IGame? = null
+    private var currentScreen: Game? = null
     private var gameScreen: GameScreen? = null
     private var homeScreen: HomeScreen? = null
     private var gameOverScreen: GameOverScreen? = null
@@ -117,12 +117,12 @@ class MainActivity : Activity(), IGame, ObservableProperty.PropertyChangedObserv
     }
 
     //IGame Implementation
-    override fun Update() {
-        currentScreen!!.Update()
+    override fun update() {
+        currentScreen!!.update()
     }
 
-    override fun Render(c: Canvas?) {
-        currentScreen!!.Render(c)
+    override fun render(c: Canvas?) {
+        currentScreen!!.render(c)
     }
 
     //Game state changes

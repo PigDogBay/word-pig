@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.graphics.Point
 import com.pigdogbay.lib.games.BitmapButton
 import com.pigdogbay.lib.games.FrameBuffer
-import com.pigdogbay.lib.games.GameView.IGame
+import com.pigdogbay.lib.games.GameView.Game
 import com.pigdogbay.lib.games.ObjectTouchHandler
 import com.pigdogbay.wordpig.model.Board
 import com.pigdogbay.wordpig.model.Boom
@@ -18,7 +18,7 @@ import com.pigdogbay.wordpig.model.TouchTile
 /**
  * Created by Mark on 01/04/2015.
  */
-class GameScreen : IGame, BitmapButton.OnClickListener, IGameEventListener {
+class GameScreen : Game, BitmapButton.OnClickListener, IGameEventListener {
     private var _Buffer: FrameBuffer? = null
     private var _TouchHandler: ObjectTouchHandler? = null
     private var _Board: Board? = null
@@ -75,12 +75,12 @@ class GameScreen : IGame, BitmapButton.OnClickListener, IGameEventListener {
     }
 
     //IGame
-    override fun Update() {
+    override fun update() {
         _Board!!.update()
         _Boom!!.update()
     }
 
-    override fun Render(c: Canvas?) {
+    override fun render(c: Canvas?) {
         _Buffer!!.clear(0)
         val buffCanvas = _Buffer!!.canvas
         _Buffer!!.draw(_Assets!!.WordBench, Defines.WORD_BENCH_X, Defines.WORD_BENCH_Y)

@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.graphics.Point
 import com.pigdogbay.lib.games.BitmapButton
 import com.pigdogbay.lib.games.FrameBuffer
-import com.pigdogbay.lib.games.GameView.IGame
+import com.pigdogbay.lib.games.GameView.Game
 import com.pigdogbay.lib.games.ObjectTouchHandler
 import com.pigdogbay.wordpig.model.Screen
 import com.pigdogbay.wordpig.model.Tile
@@ -13,7 +13,7 @@ import com.pigdogbay.wordpig.model.Tile
 /**
  * Created by Mark on 07/04/2015.
  */
-class GameOverScreen : IGame, BitmapButton.OnClickListener {
+class GameOverScreen : Game, BitmapButton.OnClickListener {
     private var screen: Screen? = null
     private var buffer: FrameBuffer? = null
     private var touchHandler: ObjectTouchHandler? = null
@@ -44,8 +44,8 @@ class GameOverScreen : IGame, BitmapButton.OnClickListener {
         addTiles("over", Defines.HOME_TILES_LINE2_Y)
     }
 
-    override fun Update() {}
-    override fun Render(c: Canvas?) {
+    override fun update() {}
+    override fun render(c: Canvas?) {
         buffer!!.clear(Color.BLUE)
         drawTiles()
         _GoButton!!.draw(buffer!!)
