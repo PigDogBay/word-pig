@@ -14,32 +14,19 @@ import com.pigdogbay.wordpig.model.Tile
  * Created by Mark on 07/04/2015.
  */
 class HomeScreen : Game, BitmapButton.OnClickListener {
-    private var screen: Screen? = null
-    private var buffer: FrameBuffer? = null
-    private var touchHandler: ObjectTouchHandler? = null
-    private var tiles: MutableList<Tile>? = null
-    private var _GoButton: BitmapButton? = null
-    private var assets: Assets? = null
-    fun setAssets(assets: Assets?) {
-        this.assets = assets
-    }
+    private val screen: Screen
+        get() = Injector.screen
+    private val touchHandler: ObjectTouchHandler
+        get() = Injector.touchHandler
+    private val tiles =  ArrayList<Tile>()
+    private val goButton: BitmapButton =
+        BitmapButton(Assets.goButton, Assets.goButtonPressed,Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
+    private val buffer : FrameBuffer
+        get() = Injector.buffer
 
-    fun setTouchHandler(touch: ObjectTouchHandler?) {
-        touchHandler = touch
-    }
 
-    fun setBuffer(buffer: FrameBuffer?) {
-        this.buffer = buffer
-    }
-
-    fun setScreen(screen: Screen?) {
-        this.screen = screen
-    }
-
-    fun initialize() {
-        _GoButton = BitmapButton(assets!!.goButton!!, assets!!.goButtonPressed!!,Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
-        _GoButton!!.setOnClickListener(this)
-        tiles = ArrayList()
+    init {
+        goButton.setOnClickListener(this)
         addTiles("word", Defines.HOME_TILES_LINE1_Y)
         addTiles("pig", Defines.HOME_TILES_LINE2_Y)
     }
@@ -49,26 +36,28 @@ class HomeScreen : Game, BitmapButton.OnClickListener {
     }
 
     override fun render(c: Canvas?) {
-        buffer!!.clear(Color.YELLOW)
+        buffer.clear(Color.YELLOW)
         drawTiles()
-        _GoButton!!.draw(buffer!!)
-        buffer!!.scaleToFit(c!!)
+        goButton.draw(buffer)
+        if (c!=null) {
+            buffer.scaleToFit(c)
+        }
     }
 
     fun registerTouchables() {
-        touchHandler!!.add(_GoButton!!)
+        touchHandler.add(goButton)
     }
 
     override fun onClick(sender: Any?) {
-        screen!!.screenStateObserver.setValue(Screen.ScreenState.Game)
+        screen.screenStateObserver.setValue(Screen.ScreenState.Game)
     }
 
     private fun drawTiles() {
         val point = Point()
-        for (t in tiles!!) {
+        for (t in tiles) {
             getTileAtlasCoords(point, t)
-            buffer!!.draw(
-                assets!!.tilesAtlas,
+            buffer.draw(
+                Assets.tilesAtlas,
                 t.x,
                 t.y,
                 point.x,
@@ -85,8 +74,8 @@ class HomeScreen : Game, BitmapButton.OnClickListener {
         var x =
             (Defines.BOARD_WIDTH - n * Defines.TILE_WIDTH - (n - 1) * Defines.TILE_POOL_X_SPACING) / 2
         for (c in newLetters.toCharArray()) {
-            tiles!!.add(Tile(c.code, x, y))
-            x = x + Defines.TILE_POOL_X_SPACING + Defines.TILE_WIDTH
+            tiles.add(Tile(c.code, x, y))
+            x += Defines.TILE_POOL_X_SPACING + Defines.TILE_WIDTH
         }
     }
 
@@ -95,13 +84,13 @@ class HomeScreen : Game, BitmapButton.OnClickListener {
         p.y = 0
         if (i >= 13) {
             p.y = Defines.TILE_HEIGHT
-            i = i - 13
+            i -= 13
         }
         p.x = i * Defines.TILE_WIDTH
     }
 
-    var jiggleIndex = -1
-    var jiggleCount = 0
+    private var jiggleIndex = -1
+    private var jiggleCount = 0
     private fun jiggle() {
         jiggleCount++
         if (jiggleCount < 5) {
@@ -110,11 +99,11 @@ class HomeScreen : Game, BitmapButton.OnClickListener {
         }
         jiggleCount = 0
         var offset = jiggleIndex * 5
-        jiggleIndex = jiggleIndex * -1
-        for (t in tiles!!) {
-            t.x = t.x + offset
-            t.y = t.y + offset
-            offset = offset * -1
+        jiggleIndex *= -1
+        for (t in tiles) {
+            t.x += offset
+            t.y += offset
+            offset *= -1
         }
     }
 }

@@ -14,58 +14,44 @@ import com.pigdogbay.wordpig.model.Tile
  * Created by Mark on 07/04/2015.
  */
 class GameOverScreen : Game, BitmapButton.OnClickListener {
-    private var screen: Screen? = null
-    private var buffer: FrameBuffer? = null
-    private var touchHandler: ObjectTouchHandler? = null
-    private var tiles: MutableList<Tile>? = null
-    private var _GoButton: BitmapButton? = null
-    private var _Assets: Assets? = null
-    fun setAssets(assets: Assets?) {
-        _Assets = assets
-    }
+    private val screen: Screen
+        get() = Injector.screen
+    private val touchHandler: ObjectTouchHandler
+        get() = Injector.touchHandler
+    private val buffer : FrameBuffer
+        get() = Injector.buffer
 
-    fun setTouchHandler(touch: ObjectTouchHandler?) {
-        touchHandler = touch
-    }
+    private val tiles = ArrayList<Tile>()
+    private val goButton: BitmapButton = BitmapButton(Assets.goButton,Assets.goButtonPressed, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
 
-    fun setBuffer(buffer: FrameBuffer?) {
-        this.buffer = buffer
-    }
-
-    fun setScreen(screen: Screen?) {
-        this.screen = screen
-    }
-
-    fun initializie() {
-        _GoButton = BitmapButton(_Assets!!.goButton!!,_Assets!!.goButtonPressed!!, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
-        _GoButton!!.setOnClickListener(this)
-        tiles = ArrayList()
+    init{
+        goButton.setOnClickListener(this)
         addTiles("game", Defines.HOME_TILES_LINE1_Y)
         addTiles("over", Defines.HOME_TILES_LINE2_Y)
     }
 
     override fun update() {}
     override fun render(c: Canvas?) {
-        buffer!!.clear(Color.BLUE)
+        buffer.clear(Color.BLUE)
         drawTiles()
-        _GoButton!!.draw(buffer!!)
-        buffer!!.scaleToFit(c!!)
+        goButton.draw(buffer)
+        buffer.scaleToFit(c!!)
     }
 
     fun registerTouchables() {
-        touchHandler!!.add(_GoButton!!)
+        touchHandler.add(goButton)
     }
 
     override fun onClick(sender: Any?) {
-        screen!!.screenStateObserver.setValue(Screen.ScreenState.Home)
+        screen.screenStateObserver.setValue(Screen.ScreenState.Home)
     }
 
     private fun drawTiles() {
         val point = Point()
-        for (t in tiles!!) {
+        for (t in tiles) {
             getTileAtlasCoords(point, t)
-            buffer!!.draw(
-                _Assets!!.tilesAtlas,
+            buffer.draw(
+                Assets.tilesAtlas,
                 t.x,
                 t.y,
                 point.x,
@@ -82,8 +68,8 @@ class GameOverScreen : Game, BitmapButton.OnClickListener {
         var x =
             (Defines.BOARD_WIDTH - n * Defines.TILE_WIDTH - (n - 1) * Defines.TILE_POOL_X_SPACING) / 2
         for (c in newLetters.toCharArray()) {
-            tiles!!.add(Tile(c.code, x, y))
-            x = x + Defines.TILE_POOL_X_SPACING + Defines.TILE_WIDTH
+            tiles.add(Tile(c.code, x, y))
+            x += Defines.TILE_POOL_X_SPACING + Defines.TILE_WIDTH
         }
     }
 
@@ -92,7 +78,7 @@ class GameOverScreen : Game, BitmapButton.OnClickListener {
         p.y = 0
         if (i >= 13) {
             p.y = Defines.TILE_HEIGHT
-            i = i - 13
+            i -= 13
         }
         p.x = i * Defines.TILE_WIDTH
     }

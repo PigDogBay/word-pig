@@ -19,92 +19,78 @@ import com.pigdogbay.wordpig.model.TouchTile
  * Created by Mark on 01/04/2015.
  */
 class GameScreen : Game, BitmapButton.OnClickListener, GameEventListener {
-    private var _Buffer: FrameBuffer? = null
-    private var _TouchHandler: ObjectTouchHandler? = null
-    private var _Board: Board? = null
-    private var _GoButton: BitmapButton? = null
-    private var _ClearButton: BitmapButton? = null
-    private var _TextPaint: Paint? = null
-    private var _TimerOuterPaint: Paint? = null
-    private var _TimerInnerPaint: Paint? = null
-    private var _BoomPaint: Paint? = null
-    private var _Assets: Assets? = null
-    private var _Boom: Boom? = null
-    fun setAssets(assets: Assets?) {
-        _Assets = assets
-    }
+    private val _GoButton: BitmapButton
+    private val _ClearButton: BitmapButton
+    private val _TextPaint: Paint
+    private val _TimerOuterPaint: Paint
+    private val _TimerInnerPaint: Paint
+    private val _BoomPaint: Paint
+    private val _Boom: Boom
+    private val board : Board
+        get() = Injector.board
+    private val buffer : FrameBuffer
+        get() = Injector.buffer
 
-    fun setBoard(board: Board?) {
-        _Board = board
-        _Board!!.addEventListener(this)
-    }
-
-    fun setTouchHandler(touch: ObjectTouchHandler?) {
-        _TouchHandler = touch
-    }
-
-    fun setBuffer(buffer: FrameBuffer?) {
-        _Buffer = buffer
-    }
-
-    fun initialize() {
+    init {
+        board.addEventListener(this)
         _TextPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        _TextPaint!!.color = Color.WHITE
-        _TextPaint!!.textSize = 36f
+        _TextPaint.color = Color.WHITE
+        _TextPaint.textSize = 36f
         _TimerInnerPaint = Paint()
-        _TimerInnerPaint!!.color = Color.WHITE
+        _TimerInnerPaint.color = Color.WHITE
         _TimerOuterPaint = Paint()
-        _TimerOuterPaint!!.color = Color.RED
+        _TimerOuterPaint.color = Color.RED
         _BoomPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        _BoomPaint!!.color = Color.RED
-        _BoomPaint!!.textSize = 144f
-        _GoButton = BitmapButton(_Assets!!.goButton!!, _Assets!!.goButtonPressed!!, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
-        _GoButton!!.setOnClickListener(this)
-        _ClearButton = BitmapButton(_Assets!!.clearButton!!,_Assets!!.clearButtonPressed!!, Defines.CLEAR_BUTTON_X, Defines.CLEAR_BUTTON_Y)
-        _ClearButton!!.setOnClickListener(this)
+        _BoomPaint.color = Color.RED
+        _BoomPaint.textSize = 144f
+        _GoButton = BitmapButton(Assets.goButton, Assets.goButtonPressed, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
+        _GoButton.setOnClickListener(this)
+        _ClearButton = BitmapButton(Assets.clearButton,Assets.clearButtonPressed, Defines.CLEAR_BUTTON_X, Defines.CLEAR_BUTTON_Y)
+        _ClearButton.setOnClickListener(this)
         _Boom = Boom()
     }
 
     fun registerTouchables() {
-        _TouchHandler!!.add(_GoButton!!)
-        _TouchHandler!!.add(_ClearButton!!)
-        for (t in _Board!!.tiles) {
+        val touchHandler = Injector.touchHandler
+        touchHandler.add(_GoButton)
+        touchHandler.add(_ClearButton)
+        for (t in Injector.board.tiles) {
             val touchTile = TouchTile(t)
-            _TouchHandler!!.add(touchTile)
+            touchHandler.add(touchTile)
         }
     }
 
-    //IGame
+    //Game
     override fun update() {
-        _Board!!.update()
-        _Boom!!.update()
+        Injector.board.update()
+        _Boom.update()
     }
 
     override fun render(c: Canvas?) {
-        _Buffer!!.clear(0)
-        val buffCanvas = _Buffer!!.canvas
-        _Buffer!!.draw(_Assets!!.wordBench, Defines.WORD_BENCH_X, Defines.WORD_BENCH_Y)
+        buffer.clear(0)
+        val buffCanvas = buffer.canvas
+        buffer.draw(Assets.wordBench, Defines.WORD_BENCH_X, Defines.WORD_BENCH_Y)
         drawButtons()
         drawScore(buffCanvas)
         drawTimer(buffCanvas)
         drawTiles()
         drawBoom(buffCanvas)
-        _Buffer!!.scaleToFit(c!!)
+        buffer.scaleToFit(c!!)
     }
 
     private fun drawBoom(buffCanvas: Canvas) {
-        if (_Boom!!.isMessageAvailable) {
-            val y = Defines.BOOM_Y - (_Boom!!.count * 10).toFloat()
-            buffCanvas.drawText(_Boom!!.latestMessage, Defines.BOOM_X, y, _BoomPaint!!)
+        if (_Boom.isMessageAvailable) {
+            val y = Defines.BOOM_Y - (_Boom.count * 10).toFloat()
+            buffCanvas.drawText(_Boom.latestMessage, Defines.BOOM_X, y, _BoomPaint)
         }
     }
 
     private fun drawTiles() {
         val point = Point()
-        for (t in _Board!!.tiles) {
+        for (t in board.tiles) {
             getTileAtlasCoords(point, t)
-            _Buffer!!.draw(
-                _Assets!!.tilesAtlas,
+            Injector.buffer.draw(
+                Assets.tilesAtlas,
                 t.x,
                 t.y,
                 point.x,
@@ -116,35 +102,35 @@ class GameScreen : Game, BitmapButton.OnClickListener, GameEventListener {
     }
 
     private fun drawButtons() {
-        _GoButton!!.draw(_Buffer!!)
-        _ClearButton!!.draw(_Buffer!!)
+        _GoButton.draw(buffer)
+        _ClearButton.draw(buffer)
     }
 
     private fun drawScore(buffCanvas: Canvas) {
         buffCanvas.drawText(
-            "Level: " + _Board!!.level.toString(),
+            "Level: " + board.level.toString(),
             Defines.LEVEL_X,
             Defines.LEVEL_Y,
-            _TextPaint!!
+            _TextPaint
         )
         buffCanvas.drawText(
-            "Score: " + _Board!!.score.toString(),
+            "Score: " + board.score.toString(),
             Defines.SCORE_X,
             Defines.SCORE_Y,
-            _TextPaint!!
+            _TextPaint
         )
     }
 
     private fun drawTimer(buffCanvas: Canvas) {
-        buffCanvas.drawRect(Defines.TIMER_OUTER_RECT, _TimerOuterPaint!!)
+        buffCanvas.drawRect(Defines.TIMER_OUTER_RECT, _TimerOuterPaint)
         var len = Defines.TIMER_INNER_RIGHT - Defines.TIMER_INNER_LEFT
-        len = Defines.TIMER_INNER_LEFT + len * _Board!!.time / Defines.TIMER_MAX_VAL
+        len = Defines.TIMER_INNER_LEFT + len * board.time / Defines.TIMER_MAX_VAL
         buffCanvas.drawRect(
             Defines.TIMER_INNER_LEFT,
             Defines.TIMER_INNER_TOP,
             len,
             Defines.TIMER_INNER_BOTTOM,
-            _TimerInnerPaint!!
+            _TimerInnerPaint
         )
     }
 
@@ -153,44 +139,44 @@ class GameScreen : Game, BitmapButton.OnClickListener, GameEventListener {
         p.y = 0
         if (i >= 13) {
             p.y = Defines.TILE_HEIGHT
-            i = i - 13
+            i -= 13
         }
         p.x = i * Defines.TILE_WIDTH
     }
 
     override fun onClick(sender: Any?) {
         if (sender === _GoButton) {
-            _Board!!.go()
+            Injector.board.go()
         } else if (sender === _ClearButton) {
-            _Board!!.clear()
+            board.clear()
         }
     }
 
     override fun onGameEvent(sender: Any, id: Int) {
         when (id) {
             GameEvents.GAME_EVENT_WORD_OK -> {
-                _Assets!!.soundManager!!.play(R.raw.coin, 0.1f)
-                _Boom!!.addMessage("+" + _Board!!.pointsScored.toString() + "pts")
+                Assets.soundManager.play(R.raw.coin, 0.1f)
+                _Boom.addMessage("+" + board.pointsScored.toString() + "pts")
             }
 
             GameEvents.GAME_EVENT_WORD_DOES_NOT_EXIST -> {
-                _Assets!!.soundManager!!.play(R.raw.laser, 0.2f)
-                _Boom!!.addMessage(Defines.SCORE_NOT_A_WORD.toString() + "pts")
+                Assets.soundManager.play(R.raw.laser, 0.2f)
+                _Boom.addMessage(Defines.SCORE_NOT_A_WORD.toString() + "pts")
             }
 
             GameEvents.GAME_EVENT_WORD_ALREADY_USED -> {
-                _Assets!!.soundManager!!.play(R.raw.laser, 0.2f)
-                _Boom!!.addMessage("Used")
+                Assets.soundManager.play(R.raw.laser, 0.2f)
+                _Boom.addMessage("Used")
             }
 
             GameEvents.GAME_EVENT_WORD_EMPTY -> {
-                _Assets!!.soundManager!!.play(R.raw.laser, 0.2f)
-                _Boom!!.addMessage("eh?")
+                Assets.soundManager.play(R.raw.laser, 0.2f)
+                _Boom.addMessage("eh?")
             }
 
-            GameEvents.GAME_EVENT_GET_READY -> _Boom!!.addMessage("Get Ready!")
-            GameEvents.GAME_EVENT_CLEAR -> _Boom!!.addMessage("CLEAR")
-            GameEvents.GAME_EVENT_TIMES_UP -> _Boom!!.addMessage("Times Up!")
+            GameEvents.GAME_EVENT_GET_READY -> _Boom.addMessage("Get Ready!")
+            GameEvents.GAME_EVENT_CLEAR -> _Boom.addMessage("CLEAR")
+            GameEvents.GAME_EVENT_TIMES_UP -> _Boom.addMessage("Times Up!")
         }
     }
 }

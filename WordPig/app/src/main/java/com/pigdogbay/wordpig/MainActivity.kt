@@ -23,14 +23,12 @@ import com.pigdogbay.wordpig.model.WordChecker
 class MainActivity : Activity(), Game, ObservableProperty.PropertyChangedObserver<ScreenState> {
     private lateinit var gameView: GameView
     private lateinit var currentScreen: Game
-    private lateinit var gameScreen: GameScreen
-    private lateinit var homeScreen: HomeScreen
-    private lateinit var gameOverScreen: GameOverScreen
-    private lateinit var buffer: FrameBuffer
-    private lateinit var touchHandler: ObjectTouchHandler
-    private lateinit var screen: Screen
-    private lateinit var board: Board
-    private lateinit var assets: Assets
+    private val gameScreen: GameScreen
+        get() = Injector.gameScreen
+    private val homeScreen: HomeScreen
+        get() = Injector.homeScreen
+    private val gameOverScreen: GameOverScreen
+        get() = Injector.gameOverScreen
 
     @Suppress("DEPRECATION")
     @SuppressLint("ClickableViewAccessibility")
@@ -52,20 +50,12 @@ class MainActivity : Activity(), Game, ObservableProperty.PropertyChangedObserve
             size.x = bounds.width()
             size.y = bounds.height()
         }
-        touchHandler = ObjectTouchHandler()
-        val xScale = Defines.BOARD_WIDTH.toFloat() / size.x.toFloat()
-        val yScale = Defines.BOARD_HEIGHT.toFloat() / size.y.toFloat()
-        touchHandler.xScale = xScale
-        touchHandler.yScale = yScale
-
-        //Load game
-        assets = Assets
-        assets.load(this)
-        createModel()
-        createScreens()
+        Assets.load(this.applicationContext)
+        Injector.build(size)
+        Injector.createScreens()
         gameView = GameView(this, this)
         gameView.setShowFPS(true)
-        gameView.setOnTouchListener(touchHandler)
+        gameView.setOnTouchListener(Injector.touchHandler)
         setContentView(gameView)
         showHome()
     }
@@ -93,57 +83,32 @@ class MainActivity : Activity(), Game, ObservableProperty.PropertyChangedObserve
     override fun onResume() {
         super.onResume()
         gameView.resume()
+        Injector.screen.screenStateObserver.addObserver(this)
     }
 
     override fun onPause() {
         super.onPause()
         gameView.pause()
-    }
-
-    private fun createModel() {
-        screen = Screen()
-        screen.screenStateObserver.addObserver(this)
-    }
-
-    private fun createScreens() {
-        buffer = FrameBuffer(Defines.BOARD_WIDTH, Defines.BOARD_HEIGHT)
-        gameScreen = GameScreen()
-        gameScreen.setTouchHandler(touchHandler)
-        gameScreen.setBuffer(buffer)
-        gameScreen.setAssets(assets)
-        gameScreen.initialize()
-        homeScreen = HomeScreen()
-        homeScreen.setTouchHandler(touchHandler)
-        homeScreen.setBuffer(buffer)
-        homeScreen.setScreen(screen)
-        homeScreen.setAssets(assets)
-        homeScreen.initialize()
-        gameOverScreen = GameOverScreen()
-        gameOverScreen.setTouchHandler(touchHandler)
-        gameOverScreen.setBuffer(buffer)
-        gameOverScreen.setScreen(screen)
-        gameOverScreen.setAssets(assets)
-        gameOverScreen.initializie()
+        Injector.screen.screenStateObserver.removeObserver(this)
     }
 
     private fun showGame() {
-        board = Board(screen)
+        val board = Injector.board
         board.setTiles("streaming")
-        board.wordChecker = WordChecker(assets.wordList)
-        gameScreen.setBoard(board)
-        touchHandler.clearTouchables()
+        board.wordChecker = WordChecker(Assets.wordList)
+        Injector.touchHandler.clearTouchables()
         gameScreen.registerTouchables()
         currentScreen = gameScreen
     }
 
     private fun showHome() {
-        touchHandler.clearTouchables()
+        Injector.touchHandler.clearTouchables()
         homeScreen.registerTouchables()
         currentScreen = homeScreen
     }
 
     private fun showGameOver() {
-        touchHandler.clearTouchables()
+        Injector.touchHandler.clearTouchables()
         gameOverScreen.registerTouchables()
         currentScreen = gameOverScreen
     }
