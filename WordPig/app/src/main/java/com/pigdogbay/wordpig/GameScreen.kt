@@ -7,9 +7,9 @@ import android.graphics.Point
 import com.pigdogbay.lib.games.BitmapButton
 import com.pigdogbay.lib.games.FrameBuffer
 import com.pigdogbay.lib.games.GameView.Game
+import com.pigdogbay.lib.patterns.PropertyChangedObserver
 import com.pigdogbay.wordpig.model.Board
 import com.pigdogbay.wordpig.model.Boom
-import com.pigdogbay.wordpig.model.GameEventListener
 import com.pigdogbay.wordpig.model.GameEvents
 import com.pigdogbay.wordpig.model.Tile
 import com.pigdogbay.wordpig.model.TouchTile
@@ -17,7 +17,7 @@ import com.pigdogbay.wordpig.model.TouchTile
 /**
  * Created by Mark on 01/04/2015.
  */
-class GameScreen : Game, BitmapButton.OnClickListener, GameEventListener {
+class GameScreen : Game, BitmapButton.OnClickListener, PropertyChangedObserver<Int> {
     private val goButton: BitmapButton
     private val clearButton: BitmapButton
     private val textPaint: Paint
@@ -31,7 +31,7 @@ class GameScreen : Game, BitmapButton.OnClickListener, GameEventListener {
         get() = Injector.buffer
 
     init {
-        board.addEventListener(this)
+        board.gameEventObserver.addObserver(this)
         textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         textPaint.color = Color.WHITE
         textPaint.textSize = 36f
@@ -151,8 +151,8 @@ class GameScreen : Game, BitmapButton.OnClickListener, GameEventListener {
         }
     }
 
-    override fun onGameEvent(sender: Any, id: Int) {
-        when (id) {
+    override fun update(sender: Any, update: Int) {
+        when (update) {
             GameEvents.GAME_EVENT_WORD_OK -> {
                 Assets.soundManager.play(R.raw.coin, 0.1f)
                 boom.addMessage("+" + board.pointsScored.toString() + "pts")
@@ -178,4 +178,5 @@ class GameScreen : Game, BitmapButton.OnClickListener, GameEventListener {
             GameEvents.GAME_EVENT_TIMES_UP -> boom.addMessage("Times Up!")
         }
     }
+
 }

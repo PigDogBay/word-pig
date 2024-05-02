@@ -1,12 +1,17 @@
 package com.pigdogbay.wordpig.model
 
 import com.pigdogbay.lib.games.Timer
+import com.pigdogbay.lib.patterns.ObservableProperty
 import com.pigdogbay.wordpig.Defines
 
-/**
- * Created by Mark on 01/04/2015.
- */
-class Board(var model: Model) {
+interface GameEventListener {
+    fun onGameEvent(sender: Any, id: Int)
+}
+enum class GameEvents2 {
+    wordOk, wordDoesNotExist, wordAlreadyUsed, wordEmpty, getReady, timesUp, clear
+}
+
+class Board(val model: Model) {
     enum class GameState {
         Initialize,
         FirstWord,
@@ -15,6 +20,7 @@ class Board(var model: Model) {
         Exit
     }
 
+    val gameEventObserver = ObservableProperty(this, 0)
     val tiles = ArrayList<Tile>()
     var score = 0
     var level = 42
@@ -25,17 +31,12 @@ class Board(var model: Model) {
     private val usedWords = ArrayList<String>()
     private var gameState = GameState.Initialize
     private val timer = Timer(0)
-    private val gameEvent = GameEvent()
-
-    fun addEventListener(listener: GameEventListener) {
-        gameEvent.addListener(listener)
-    }
 
     fun update() {
         when (gameState) {
             GameState.Initialize -> {
                 gameState = GameState.FirstWord
-                gameEvent.fire(this, GameEvents.GAME_EVENT_GET_READY)
+                gameEventObserver.value = GameEvents.GAME_EVENT_GET_READY
             }
 
             GameState.FirstWord -> if (usedWords.size > 0) {
@@ -47,7 +48,7 @@ class Board(var model: Model) {
                 if (time == 0f) {
                     timer.reset(Defines.TIMES_UP_DURATION)
                     gameState = GameState.TimesUp
-                    gameEvent.fire(this, GameEvents.GAME_EVENT_TIMES_UP)
+                    gameEventObserver.value = GameEvents.GAME_EVENT_TIMES_UP
                 }
             }
 
@@ -76,20 +77,20 @@ class Board(var model: Model) {
         }
         val word = word
         if ("" == word) {
-            gameEvent.fire(this, GameEvents.GAME_EVENT_WORD_EMPTY)
+            gameEventObserver.value = GameEvents.GAME_EVENT_WORD_EMPTY
             return
         }
         if (usedWords.contains(word)) {
-            gameEvent.fire(this, GameEvents.GAME_EVENT_WORD_ALREADY_USED)
+            gameEventObserver.value = GameEvents.GAME_EVENT_WORD_ALREADY_USED
             return
         }
         if (wordChecker!!.isWord(word)) {
             pointsScored = tray.score
             score += pointsScored
-            gameEvent.fire(this, GameEvents.GAME_EVENT_WORD_OK)
+            gameEventObserver.value = GameEvents.GAME_EVENT_WORD_OK
         } else {
             score += Defines.SCORE_NOT_A_WORD
-            gameEvent.fire(this, GameEvents.GAME_EVENT_WORD_DOES_NOT_EXIST)
+            gameEventObserver.value = GameEvents.GAME_EVENT_WORD_DOES_NOT_EXIST
         }
         usedWords.add(word)
     }
@@ -101,7 +102,7 @@ class Board(var model: Model) {
             t.y = Defines.TILE_POOL_Y
             x += Defines.TILE_POOL_X_SPACING + Defines.TILE_WIDTH
         }
-        gameEvent.fire(this, GameEvents.GAME_EVENT_CLEAR)
+        gameEventObserver.value = GameEvents.GAME_EVENT_CLEAR
     }
 
     private val word: String
