@@ -17,7 +17,7 @@ import com.pigdogbay.wordpig.model.TouchTile
 /**
  * Created by Mark on 01/04/2015.
  */
-class GameScreen : Game, BitmapButton.OnClickListener, PropertyChangedObserver<Int> {
+class GameScreen : Game, BitmapButton.OnClickListener, PropertyChangedObserver<GameEvents> {
     private val goButton: BitmapButton
     private val clearButton: BitmapButton
     private val textPaint: Paint
@@ -151,31 +151,31 @@ class GameScreen : Game, BitmapButton.OnClickListener, PropertyChangedObserver<I
         }
     }
 
-    override fun update(sender: Any, update: Int) {
+    override fun update(sender: Any, update: GameEvents) {
         when (update) {
-            GameEvents.GAME_EVENT_WORD_OK -> {
+            GameEvents.WordOk -> {
                 Assets.soundManager.play(R.raw.coin, 0.1f)
                 boom.addMessage("+" + board.pointsScored.toString() + "pts")
             }
 
-            GameEvents.GAME_EVENT_WORD_DOES_NOT_EXIST -> {
+            GameEvents.WordDoesNotExist -> {
                 Assets.soundManager.play(R.raw.laser, 0.2f)
                 boom.addMessage(Defines.SCORE_NOT_A_WORD.toString() + "pts")
             }
 
-            GameEvents.GAME_EVENT_WORD_ALREADY_USED -> {
+            GameEvents.WordAlreadyUsed -> {
                 Assets.soundManager.play(R.raw.laser, 0.2f)
                 boom.addMessage("Used")
             }
 
-            GameEvents.GAME_EVENT_WORD_EMPTY -> {
+            GameEvents.WordEmpty -> {
                 Assets.soundManager.play(R.raw.laser, 0.2f)
                 boom.addMessage("eh?")
             }
 
-            GameEvents.GAME_EVENT_GET_READY -> boom.addMessage("Get Ready!")
-            GameEvents.GAME_EVENT_CLEAR -> boom.addMessage("CLEAR")
-            GameEvents.GAME_EVENT_TIMES_UP -> boom.addMessage("Times Up!")
+            GameEvents.GetReady -> boom.addMessage("Get Ready!")
+            GameEvents.Clear -> boom.addMessage("CLEAR")
+            GameEvents.TimesUp -> boom.addMessage("Times Up!")
         }
     }
 

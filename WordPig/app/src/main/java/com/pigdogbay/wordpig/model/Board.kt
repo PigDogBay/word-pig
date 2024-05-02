@@ -4,11 +4,8 @@ import com.pigdogbay.lib.games.Timer
 import com.pigdogbay.lib.patterns.ObservableProperty
 import com.pigdogbay.wordpig.Defines
 
-interface GameEventListener {
-    fun onGameEvent(sender: Any, id: Int)
-}
-enum class GameEvents2 {
-    wordOk, wordDoesNotExist, wordAlreadyUsed, wordEmpty, getReady, timesUp, clear
+enum class GameEvents {
+    WordOk, WordDoesNotExist, WordAlreadyUsed, WordEmpty, GetReady, TimesUp, Clear
 }
 
 class Board(val model: Model) {
@@ -20,7 +17,7 @@ class Board(val model: Model) {
         Exit
     }
 
-    val gameEventObserver = ObservableProperty(this, 0)
+    val gameEventObserver = ObservableProperty(this, GameEvents.GetReady)
     val tiles = ArrayList<Tile>()
     var score = 0
     var level = 42
@@ -36,7 +33,7 @@ class Board(val model: Model) {
         when (gameState) {
             GameState.Initialize -> {
                 gameState = GameState.FirstWord
-                gameEventObserver.value = GameEvents.GAME_EVENT_GET_READY
+                gameEventObserver.value = GameEvents.GetReady
             }
 
             GameState.FirstWord -> if (usedWords.size > 0) {
@@ -48,7 +45,7 @@ class Board(val model: Model) {
                 if (time == 0f) {
                     timer.reset(Defines.TIMES_UP_DURATION)
                     gameState = GameState.TimesUp
-                    gameEventObserver.value = GameEvents.GAME_EVENT_TIMES_UP
+                    gameEventObserver.value = GameEvents.TimesUp
                 }
             }
 
@@ -77,20 +74,20 @@ class Board(val model: Model) {
         }
         val word = word
         if ("" == word) {
-            gameEventObserver.value = GameEvents.GAME_EVENT_WORD_EMPTY
+            gameEventObserver.value = GameEvents.WordEmpty
             return
         }
         if (usedWords.contains(word)) {
-            gameEventObserver.value = GameEvents.GAME_EVENT_WORD_ALREADY_USED
+            gameEventObserver.value = GameEvents.WordAlreadyUsed
             return
         }
         if (wordChecker!!.isWord(word)) {
             pointsScored = tray.score
             score += pointsScored
-            gameEventObserver.value = GameEvents.GAME_EVENT_WORD_OK
+            gameEventObserver.value = GameEvents.WordOk
         } else {
             score += Defines.SCORE_NOT_A_WORD
-            gameEventObserver.value = GameEvents.GAME_EVENT_WORD_DOES_NOT_EXIST
+            gameEventObserver.value = GameEvents.WordDoesNotExist
         }
         usedWords.add(word)
     }
@@ -102,7 +99,7 @@ class Board(val model: Model) {
             t.y = Defines.TILE_POOL_Y
             x += Defines.TILE_POOL_X_SPACING + Defines.TILE_WIDTH
         }
-        gameEventObserver.value = GameEvents.GAME_EVENT_CLEAR
+        gameEventObserver.value = GameEvents.Clear
     }
 
     private val word: String
