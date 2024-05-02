@@ -58,9 +58,9 @@ class GameScreen : Game, BitmapButton.OnClickListener, GameEventListener {
         _BoomPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         _BoomPaint!!.color = Color.RED
         _BoomPaint!!.textSize = 144f
-        _GoButton = BitmapButton(_Assets!!.GoButton!!, _Assets!!.GoButtonPressed!!, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
+        _GoButton = BitmapButton(_Assets!!.goButton!!, _Assets!!.goButtonPressed!!, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
         _GoButton!!.setOnClickListener(this)
-        _ClearButton = BitmapButton(_Assets!!.ClearButton!!,_Assets!!.ClearButtonPressed!!, Defines.CLEAR_BUTTON_X, Defines.CLEAR_BUTTON_Y)
+        _ClearButton = BitmapButton(_Assets!!.clearButton!!,_Assets!!.clearButtonPressed!!, Defines.CLEAR_BUTTON_X, Defines.CLEAR_BUTTON_Y)
         _ClearButton!!.setOnClickListener(this)
         _Boom = Boom()
     }
@@ -83,7 +83,7 @@ class GameScreen : Game, BitmapButton.OnClickListener, GameEventListener {
     override fun render(c: Canvas?) {
         _Buffer!!.clear(0)
         val buffCanvas = _Buffer!!.canvas
-        _Buffer!!.draw(_Assets!!.WordBench, Defines.WORD_BENCH_X, Defines.WORD_BENCH_Y)
+        _Buffer!!.draw(_Assets!!.wordBench, Defines.WORD_BENCH_X, Defines.WORD_BENCH_Y)
         drawButtons()
         drawScore(buffCanvas)
         drawTimer(buffCanvas)
@@ -104,7 +104,7 @@ class GameScreen : Game, BitmapButton.OnClickListener, GameEventListener {
         for (t in _Board!!.tiles) {
             getTileAtlasCoords(point, t)
             _Buffer!!.draw(
-                _Assets!!.TilesAtlas,
+                _Assets!!.tilesAtlas,
                 t.x,
                 t.y,
                 point.x,
@@ -169,22 +169,22 @@ class GameScreen : Game, BitmapButton.OnClickListener, GameEventListener {
     override fun onGameEvent(sender: Any, id: Int) {
         when (id) {
             GameEvents.GAME_EVENT_WORD_OK -> {
-                _Assets!!.SoundManager!!.play(R.raw.coin, 0.1f)
+                _Assets!!.soundManager!!.play(R.raw.coin, 0.1f)
                 _Boom!!.addMessage("+" + _Board!!.pointsScored.toString() + "pts")
             }
 
             GameEvents.GAME_EVENT_WORD_DOES_NOT_EXIST -> {
-                _Assets!!.SoundManager!!.play(R.raw.laser, 0.2f)
+                _Assets!!.soundManager!!.play(R.raw.laser, 0.2f)
                 _Boom!!.addMessage(Defines.SCORE_NOT_A_WORD.toString() + "pts")
             }
 
             GameEvents.GAME_EVENT_WORD_ALREADY_USED -> {
-                _Assets!!.SoundManager!!.play(R.raw.laser, 0.2f)
+                _Assets!!.soundManager!!.play(R.raw.laser, 0.2f)
                 _Boom!!.addMessage("Used")
             }
 
             GameEvents.GAME_EVENT_WORD_EMPTY -> {
-                _Assets!!.SoundManager!!.play(R.raw.laser, 0.2f)
+                _Assets!!.soundManager!!.play(R.raw.laser, 0.2f)
                 _Boom!!.addMessage("eh?")
             }
 

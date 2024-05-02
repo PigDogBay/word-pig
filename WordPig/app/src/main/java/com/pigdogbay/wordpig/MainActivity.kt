@@ -47,7 +47,7 @@ class MainActivity : Activity(), Game, ObservableProperty.PropertyChangedObserve
         touchHandler!!.yScale = yScale
 
         //Load game
-        assets = Assets()
+        assets = Assets
         assets!!.load(this)
         createModel()
         createScreens()

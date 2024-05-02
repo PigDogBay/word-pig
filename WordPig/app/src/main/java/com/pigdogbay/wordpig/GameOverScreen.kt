@@ -37,7 +37,7 @@ class GameOverScreen : Game, BitmapButton.OnClickListener {
     }
 
     fun initializie() {
-        _GoButton = BitmapButton(_Assets!!.GoButton!!,_Assets!!.GoButtonPressed!!, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
+        _GoButton = BitmapButton(_Assets!!.goButton!!,_Assets!!.goButtonPressed!!, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
         _GoButton!!.setOnClickListener(this)
         tiles = ArrayList()
         addTiles("game", Defines.HOME_TILES_LINE1_Y)
@@ -65,7 +65,7 @@ class GameOverScreen : Game, BitmapButton.OnClickListener {
         for (t in tiles!!) {
             getTileAtlasCoords(point, t)
             buffer!!.draw(
-                _Assets!!.TilesAtlas,
+                _Assets!!.tilesAtlas,
                 t.x,
                 t.y,
                 point.x,

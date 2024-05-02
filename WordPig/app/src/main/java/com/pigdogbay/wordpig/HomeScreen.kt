@@ -37,7 +37,7 @@ class HomeScreen : Game, BitmapButton.OnClickListener {
     }
 
     fun initialize() {
-        _GoButton = BitmapButton(assets!!.GoButton!!, assets!!.GoButtonPressed!!,Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
+        _GoButton = BitmapButton(assets!!.goButton!!, assets!!.goButtonPressed!!,Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
         _GoButton!!.setOnClickListener(this)
         tiles = ArrayList()
         addTiles("word", Defines.HOME_TILES_LINE1_Y)
@@ -68,7 +68,7 @@ class HomeScreen : Game, BitmapButton.OnClickListener {
         for (t in tiles!!) {
             getTileAtlasCoords(point, t)
             buffer!!.draw(
-                assets!!.TilesAtlas,
+                assets!!.tilesAtlas,
                 t.x,
                 t.y,
                 point.x,
