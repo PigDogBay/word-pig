@@ -4,9 +4,6 @@ package com.pigdogbay.wordpig.model
  * Created by Mark on 18/05/2015.
  */
 class GameEvent {
-    interface GameEventListener {
-        fun onGameEvent(sender: Any, id: Int)
-    }
 
     var listeners = ArrayList<GameEventListener>()
 

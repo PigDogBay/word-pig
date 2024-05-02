@@ -7,10 +7,9 @@ import android.graphics.Point
 import com.pigdogbay.lib.games.BitmapButton
 import com.pigdogbay.lib.games.FrameBuffer
 import com.pigdogbay.lib.games.GameView.Game
-import com.pigdogbay.lib.games.ObjectTouchHandler
 import com.pigdogbay.wordpig.model.Board
 import com.pigdogbay.wordpig.model.Boom
-import com.pigdogbay.wordpig.model.GameEvent.GameEventListener
+import com.pigdogbay.wordpig.model.GameEventListener
 import com.pigdogbay.wordpig.model.GameEvents
 import com.pigdogbay.wordpig.model.Tile
 import com.pigdogbay.wordpig.model.TouchTile

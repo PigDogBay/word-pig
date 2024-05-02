@@ -2,7 +2,6 @@ package com.pigdogbay.wordpig.model
 
 import com.pigdogbay.lib.games.Timer
 import com.pigdogbay.wordpig.Defines
-import com.pigdogbay.wordpig.model.GameEvent.GameEventListener
 
 /**
  * Created by Mark on 01/04/2015.
