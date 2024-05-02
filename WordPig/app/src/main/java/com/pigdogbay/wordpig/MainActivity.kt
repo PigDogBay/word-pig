@@ -12,8 +12,11 @@ import android.view.WindowInsetsController
 import android.view.WindowManager
 import com.pigdogbay.lib.games.GameView
 import com.pigdogbay.lib.games.GameView.Game
+import com.pigdogbay.lib.games.ObjectTouchHandler
 import com.pigdogbay.lib.patterns.ObservableProperty
 import com.pigdogbay.lib.patterns.PropertyChangedObserver
+import com.pigdogbay.wordpig.model.Board
+import com.pigdogbay.wordpig.model.Model
 import com.pigdogbay.wordpig.model.ScreenState
 import com.pigdogbay.wordpig.model.WordChecker
 
@@ -26,6 +29,12 @@ class MainActivity : Activity(), Game, PropertyChangedObserver<ScreenState> {
         get() = Injector.homeScreen
     private val gameOverScreen: GameOverScreen
         get() = Injector.gameOverScreen
+    private val board : Board
+        get() = Injector.model.board
+    private val model : Model
+        get() = Injector.model
+    private val touchHandler : ObjectTouchHandler
+        get() = Injector.touchHandler
 
     @Suppress("DEPRECATION")
     @SuppressLint("ClickableViewAccessibility")
@@ -52,7 +61,7 @@ class MainActivity : Activity(), Game, PropertyChangedObserver<ScreenState> {
         Injector.createScreens()
         gameView = GameView(this, this)
         gameView.setShowFPS(true)
-        gameView.setOnTouchListener(Injector.touchHandler)
+        gameView.setOnTouchListener(touchHandler)
         setContentView(gameView)
         showHome()
     }
@@ -80,32 +89,32 @@ class MainActivity : Activity(), Game, PropertyChangedObserver<ScreenState> {
     override fun onResume() {
         super.onResume()
         gameView.resume()
-        Injector.model.screenStateObserver.addObserver(this)
+        model.screenStateObserver.addObserver(this)
     }
 
     override fun onPause() {
         super.onPause()
         gameView.pause()
-        Injector.model.screenStateObserver.removeObserver(this)
+        model.screenStateObserver.removeObserver(this)
     }
 
     private fun showGame() {
-        val board = Injector.board
+        val board = board
         board.setTiles("streaming")
         board.wordChecker = WordChecker(Assets.wordList)
-        Injector.touchHandler.clearTouchables()
+        touchHandler.clearTouchables()
         gameScreen.registerTouchables()
         currentScreen = gameScreen
     }
 
     private fun showHome() {
-        Injector.touchHandler.clearTouchables()
+        touchHandler.clearTouchables()
         homeScreen.registerTouchables()
         currentScreen = homeScreen
     }
 
     private fun showGameOver() {
-        Injector.touchHandler.clearTouchables()
+        touchHandler.clearTouchables()
         gameOverScreen.registerTouchables()
         currentScreen = gameOverScreen
     }

@@ -8,7 +8,6 @@ import com.pigdogbay.wordpig.model.Model
 
 object Injector {
     val model = Model()
-    val board = Board(model)
     lateinit var gameScreen: GameScreen
     lateinit var homeScreen: HomeScreen
     lateinit var gameOverScreen: GameOverScreen

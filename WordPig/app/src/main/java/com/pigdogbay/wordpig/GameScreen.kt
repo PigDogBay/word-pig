@@ -26,7 +26,7 @@ class GameScreen : Game, BitmapButton.OnClickListener, PropertyChangedObserver<G
     private val boomPaint: Paint
     private val boom: Boom
     private val board : Board
-        get() = Injector.board
+        get() = Injector.model.board
     private val buffer : FrameBuffer
         get() = Injector.buffer
 
@@ -53,7 +53,7 @@ class GameScreen : Game, BitmapButton.OnClickListener, PropertyChangedObserver<G
         val touchHandler = Injector.touchHandler
         touchHandler.add(goButton)
         touchHandler.add(clearButton)
-        for (t in Injector.board.tiles) {
+        for (t in board.tiles) {
             val touchTile = TouchTile(t)
             touchHandler.add(touchTile)
         }
@@ -61,7 +61,7 @@ class GameScreen : Game, BitmapButton.OnClickListener, PropertyChangedObserver<G
 
     //Game
     override fun update() {
-        Injector.board.update()
+        board.update()
         boom.update()
     }
 
@@ -145,7 +145,7 @@ class GameScreen : Game, BitmapButton.OnClickListener, PropertyChangedObserver<G
 
     override fun onClick(sender: Any?) {
         if (sender === goButton) {
-            Injector.board.go()
+            board.go()
         } else if (sender === clearButton) {
             board.clear()
         }
