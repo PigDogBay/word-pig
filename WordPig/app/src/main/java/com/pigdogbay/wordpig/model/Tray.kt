@@ -1,19 +1,10 @@
 package com.pigdogbay.wordpig.model
 
 import com.pigdogbay.wordpig.Defines
-import java.util.Collections
 
-/**
- * Created by Mark on 07/04/2015.
- */
 class Tray {
-    private val buffer: StringBuilder
-    private val trayTiles: MutableList<Tile>
-
-    init {
-        trayTiles = ArrayList()
-        buffer = StringBuilder()
-    }
+    private val buffer = StringBuilder()
+    private val trayTiles = ArrayList<Tile>()
 
     fun setTilesIfInTray(tiles: List<Tile>) {
         trayTiles.clear()
@@ -25,7 +16,7 @@ class Tray {
     }
 
     fun sortTilesByPosition() {
-        Collections.sort(trayTiles) { lhs, rhs -> lhs.x - rhs.x }
+        trayTiles.sortWith { lhs, rhs -> lhs.x - rhs.x }
     }
 
     val score: Int
@@ -33,7 +24,7 @@ class Tray {
             var score = 0
             for (t in trayTiles) {
                 val index = t.letter - 'a'.code
-                score = score + Defines.SCORE_LETTER[index]
+                score += Defines.SCORE_LETTER[index]
             }
             return score
         }
