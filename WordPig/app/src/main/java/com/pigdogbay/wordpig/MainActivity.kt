@@ -10,14 +10,10 @@ import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
-import com.pigdogbay.lib.games.FrameBuffer
 import com.pigdogbay.lib.games.GameView
 import com.pigdogbay.lib.games.GameView.Game
-import com.pigdogbay.lib.games.ObjectTouchHandler
 import com.pigdogbay.lib.utils.ObservableProperty
-import com.pigdogbay.wordpig.model.Board
-import com.pigdogbay.wordpig.model.Screen
-import com.pigdogbay.wordpig.model.Screen.ScreenState
+import com.pigdogbay.wordpig.model.ScreenState
 import com.pigdogbay.wordpig.model.WordChecker
 
 class MainActivity : Activity(), Game, ObservableProperty.PropertyChangedObserver<ScreenState> {
@@ -83,13 +79,13 @@ class MainActivity : Activity(), Game, ObservableProperty.PropertyChangedObserve
     override fun onResume() {
         super.onResume()
         gameView.resume()
-        Injector.screen.screenStateObserver.addObserver(this)
+        Injector.model.screenStateObserver.addObserver(this)
     }
 
     override fun onPause() {
         super.onPause()
         gameView.pause()
-        Injector.screen.screenStateObserver.removeObserver(this)
+        Injector.model.screenStateObserver.removeObserver(this)
     }
 
     private fun showGame() {

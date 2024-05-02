@@ -3,12 +3,11 @@ package com.pigdogbay.wordpig.model
 import com.pigdogbay.lib.games.Timer
 import com.pigdogbay.wordpig.Defines
 import com.pigdogbay.wordpig.model.GameEvent.GameEventListener
-import com.pigdogbay.wordpig.model.Screen.ScreenState
 
 /**
  * Created by Mark on 01/04/2015.
  */
-class Board(var screen: Screen) {
+class Board(var model: Model) {
     enum class GameState {
         Initialize,
         FirstWord,
@@ -114,6 +113,6 @@ class Board(var screen: Screen) {
         }
 
     private fun gameOver() {
-        screen.screenStateObserver.setValue(ScreenState.GameOver)
+        model.screenStateObserver.setValue(ScreenState.GameOver)
     }
 }

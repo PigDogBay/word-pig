@@ -7,15 +7,16 @@ import com.pigdogbay.lib.games.BitmapButton
 import com.pigdogbay.lib.games.FrameBuffer
 import com.pigdogbay.lib.games.GameView.Game
 import com.pigdogbay.lib.games.ObjectTouchHandler
-import com.pigdogbay.wordpig.model.Screen
+import com.pigdogbay.wordpig.model.Model
+import com.pigdogbay.wordpig.model.ScreenState
 import com.pigdogbay.wordpig.model.Tile
 
 /**
  * Created by Mark on 07/04/2015.
  */
 class HomeScreen : Game, BitmapButton.OnClickListener {
-    private val screen: Screen
-        get() = Injector.screen
+    private val model: Model
+        get() = Injector.model
     private val touchHandler: ObjectTouchHandler
         get() = Injector.touchHandler
     private val tiles =  ArrayList<Tile>()
@@ -49,7 +50,7 @@ class HomeScreen : Game, BitmapButton.OnClickListener {
     }
 
     override fun onClick(sender: Any?) {
-        screen.screenStateObserver.setValue(Screen.ScreenState.Game)
+        model.screenStateObserver.setValue(ScreenState.Game)
     }
 
     private fun drawTiles() {

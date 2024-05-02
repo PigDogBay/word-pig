@@ -4,11 +4,11 @@ import android.graphics.Point
 import com.pigdogbay.lib.games.FrameBuffer
 import com.pigdogbay.lib.games.ObjectTouchHandler
 import com.pigdogbay.wordpig.model.Board
-import com.pigdogbay.wordpig.model.Screen
+import com.pigdogbay.wordpig.model.Model
 
 object Injector {
-    val screen = Screen()
-    val board = Board(screen)
+    val model = Model()
+    val board = Board(model)
     lateinit var gameScreen: GameScreen
     lateinit var homeScreen: HomeScreen
     lateinit var gameOverScreen: GameOverScreen
