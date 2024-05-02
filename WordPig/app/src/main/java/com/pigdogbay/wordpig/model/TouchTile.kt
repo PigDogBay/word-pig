@@ -4,17 +4,16 @@ import com.pigdogbay.lib.games.ObjectTouchHandler.Touchable
 import com.pigdogbay.lib.games.ObjectTouchHandler.TouchState
 import com.pigdogbay.wordpig.Defines
 
-/**
- * Created by Mark on 01/04/2015.
- */
+class Tile(val letter: Int, var x: Int, var y: Int)
+
 class TouchTile(var tile: Tile) : Touchable {
     override fun contains(x: Int, y: Int): Boolean {
         var tx = tile.x
         var ty = tile.y
         if (x > tx && y > ty) {
-            tx = tx + Defines.TILE_WIDTH
+            tx += Defines.TILE_WIDTH
             if (x < tx) {
-                ty = ty + Defines.TILE_HEIGHT
+                ty += Defines.TILE_HEIGHT
                 return y < ty
             }
         }
