@@ -1,6 +1,6 @@
 package com.pigdogbay.wordpig.model
 
-import com.pigdogbay.lib.utils.ObservableProperty
+import com.pigdogbay.lib.patterns.ObservableProperty
 
 enum class ScreenState { Home, Game, GameOver }
 
@@ -9,5 +9,5 @@ interface GameEventListener {
 }
 
 class Model {
-    val screenStateObserver = ObservableProperty(ScreenState.Home)
+    val screenStateObserver = ObservableProperty(this,ScreenState.Home)
 }

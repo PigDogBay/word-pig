@@ -112,6 +112,6 @@ class Board(var model: Model) {
         }
 
     private fun gameOver() {
-        model.screenStateObserver.setValue(ScreenState.GameOver)
+        model.screenStateObserver.value = ScreenState.GameOver
     }
 }

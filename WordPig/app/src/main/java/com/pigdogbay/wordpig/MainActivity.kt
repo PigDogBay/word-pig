@@ -12,11 +12,12 @@ import android.view.WindowInsetsController
 import android.view.WindowManager
 import com.pigdogbay.lib.games.GameView
 import com.pigdogbay.lib.games.GameView.Game
-import com.pigdogbay.lib.utils.ObservableProperty
+import com.pigdogbay.lib.patterns.ObservableProperty
+import com.pigdogbay.lib.patterns.PropertyChangedObserver
 import com.pigdogbay.wordpig.model.ScreenState
 import com.pigdogbay.wordpig.model.WordChecker
 
-class MainActivity : Activity(), Game, ObservableProperty.PropertyChangedObserver<ScreenState> {
+class MainActivity : Activity(), Game, PropertyChangedObserver<ScreenState> {
     private lateinit var gameView: GameView
     private lateinit var currentScreen: Game
     private val gameScreen: GameScreen
@@ -118,9 +119,9 @@ class MainActivity : Activity(), Game, ObservableProperty.PropertyChangedObserve
         currentScreen.render(c)
     }
 
-    //Game state changes
-    override fun update(sender: ObservableProperty<ScreenState?>?, update: ScreenState?) {
-        when (update!!) {
+    //Screen state changes
+    override fun update(sender: Any, update: ScreenState) {
+        when (update) {
             ScreenState.Home -> showHome()
             ScreenState.Game -> showGame()
             ScreenState.GameOver -> showGameOver()

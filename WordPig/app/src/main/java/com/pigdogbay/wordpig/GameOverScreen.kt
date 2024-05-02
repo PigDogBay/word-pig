@@ -44,7 +44,7 @@ class GameOverScreen : Game, BitmapButton.OnClickListener {
     }
 
     override fun onClick(sender: Any?) {
-        model.screenStateObserver.setValue(ScreenState.Home)
+        model.screenStateObserver.value = ScreenState.Home
     }
 
     private fun drawTiles() {
