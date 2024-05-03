@@ -7,11 +7,7 @@ import android.graphics.Point
 import com.pigdogbay.lib.games.BitmapButton
 import com.pigdogbay.lib.games.FrameBuffer
 import com.pigdogbay.lib.games.GameView.Game
-import com.pigdogbay.lib.patterns.PropertyChangedObserver
 import com.pigdogbay.wordpig.model.Board
-import com.pigdogbay.wordpig.model.Boom
-import com.pigdogbay.wordpig.model.GameEvents
-import com.pigdogbay.wordpig.model.Tile
 import com.pigdogbay.wordpig.model.TouchTile
 import com.pigdogbay.wordpig.presenter.GamePresenter
 import com.pigdogbay.wordpig.presenter.IGameView
@@ -19,38 +15,34 @@ import com.pigdogbay.wordpig.presenter.IGameView
 /**
  * Created by Mark on 01/04/2015.
  */
-class GameScreen : Game, BitmapButton.OnClickListener, PropertyChangedObserver<GameEvents>, IGameView {
+class GameScreen : Game, BitmapButton.OnClickListener, IGameView {
     val presenter = GamePresenter(Injector.model,this)
 
     private val goButton: BitmapButton
     private val clearButton: BitmapButton
-    private val textPaint: Paint
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val timerOuterPaint: Paint
     private val timerInnerPaint: Paint
-    private val boomPaint: Paint
-    private val boom: Boom
+    private val boomPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val board : Board
         get() = Injector.model.board
     private val buffer : FrameBuffer
         get() = Injector.buffer
 
     init {
-        board.gameEventObserver.addObserver(this)
-        textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         textPaint.color = Color.WHITE
         textPaint.textSize = 36f
         timerInnerPaint = Paint()
         timerInnerPaint.color = Color.WHITE
         timerOuterPaint = Paint()
         timerOuterPaint.color = Color.RED
-        boomPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         boomPaint.color = Color.RED
         boomPaint.textSize = 144f
         goButton = BitmapButton(Assets.goButton, Assets.goButtonPressed, Defines.GO_BUTTON_X, Defines.GO_BUTTON_Y)
         goButton.setOnClickListener(this)
         clearButton = BitmapButton(Assets.clearButton,Assets.clearButtonPressed, Defines.CLEAR_BUTTON_X, Defines.CLEAR_BUTTON_Y)
         clearButton.setOnClickListener(this)
-        boom = Boom()
+        presenter.initialize()
     }
 
     fun registerTouchables() {
@@ -66,7 +58,7 @@ class GameScreen : Game, BitmapButton.OnClickListener, PropertyChangedObserver<G
     //Game
     override fun update() {
         board.update()
-        boom.update()
+        presenter.boom.update()
     }
 
     override fun render(c: Canvas?) {
@@ -82,16 +74,16 @@ class GameScreen : Game, BitmapButton.OnClickListener, PropertyChangedObserver<G
     }
 
     private fun drawBoom(buffCanvas: Canvas) {
-        if (boom.isMessageAvailable) {
-            val y = Defines.BOOM_Y - (boom.count * 10).toFloat()
-            buffCanvas.drawText(boom.latestMessage, Defines.BOOM_X, y, boomPaint)
+        if (presenter.boom.isMessageAvailable) {
+            val y = Defines.BOOM_Y - (presenter.boom.count * 10).toFloat()
+            buffCanvas.drawText(presenter.boom.latestMessage, Defines.BOOM_X, y, boomPaint)
         }
     }
 
     private fun drawTiles() {
         val point = Point()
         for (t in board.tiles) {
-            getTileAtlasCoords(point, t)
+            presenter.getTileAtlasCoords(point, t)
             Injector.buffer.draw(
                 Assets.tilesAtlas,
                 t.x,
@@ -137,50 +129,15 @@ class GameScreen : Game, BitmapButton.OnClickListener, PropertyChangedObserver<G
         )
     }
 
-    private fun getTileAtlasCoords(p: Point, t: Tile) {
-        var i = t.letter - 'a'.code
-        p.y = 0
-        if (i >= 13) {
-            p.y = Defines.TILE_HEIGHT
-            i -= 13
-        }
-        p.x = i * Defines.TILE_WIDTH
-    }
-
     override fun onClick(sender: Any?) {
         if (sender === goButton) {
-            board.go()
+            presenter.goClicked()
         } else if (sender === clearButton) {
-            board.clear()
+            presenter.clearClicked()
         }
     }
 
-    override fun update(sender: Any, update: GameEvents) {
-        when (update) {
-            GameEvents.WordOk -> {
-                Assets.soundManager.play(R.raw.coin, 0.1f)
-                boom.addMessage("+" + board.pointsScored.toString() + "pts")
-            }
-
-            GameEvents.WordDoesNotExist -> {
-                Assets.soundManager.play(R.raw.laser, 0.2f)
-                boom.addMessage(Defines.SCORE_NOT_A_WORD.toString() + "pts")
-            }
-
-            GameEvents.WordAlreadyUsed -> {
-                Assets.soundManager.play(R.raw.laser, 0.2f)
-                boom.addMessage("Used")
-            }
-
-            GameEvents.WordEmpty -> {
-                Assets.soundManager.play(R.raw.laser, 0.2f)
-                boom.addMessage("eh?")
-            }
-
-            GameEvents.GetReady -> boom.addMessage("Get Ready!")
-            GameEvents.Clear -> boom.addMessage("CLEAR")
-            GameEvents.TimesUp -> boom.addMessage("Times Up!")
-        }
+    override fun playSound(id: Int, volume: Float) {
+        Assets.soundManager.play(id, volume)
     }
-
 }
