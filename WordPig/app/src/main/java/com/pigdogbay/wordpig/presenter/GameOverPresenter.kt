@@ -6,7 +6,8 @@ import com.pigdogbay.wordpig.model.Model
 import com.pigdogbay.wordpig.model.ScreenState
 import com.pigdogbay.wordpig.model.Tile
 
-class GameOverPresenter(val model : Model, val view : IGameOverView) {
+interface IGameOverView
+class GameOverPresenter(val model: Model, val view: IGameOverView) {
     val tiles = ArrayList<Tile>()
 
     fun goButtonClicked(){

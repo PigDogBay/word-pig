@@ -13,11 +13,15 @@ import com.pigdogbay.wordpig.model.Boom
 import com.pigdogbay.wordpig.model.GameEvents
 import com.pigdogbay.wordpig.model.Tile
 import com.pigdogbay.wordpig.model.TouchTile
+import com.pigdogbay.wordpig.presenter.GamePresenter
+import com.pigdogbay.wordpig.presenter.IGameView
 
 /**
  * Created by Mark on 01/04/2015.
  */
-class GameScreen : Game, BitmapButton.OnClickListener, PropertyChangedObserver<GameEvents> {
+class GameScreen : Game, BitmapButton.OnClickListener, PropertyChangedObserver<GameEvents>, IGameView {
+    val presenter = GamePresenter(Injector.model,this)
+
     private val goButton: BitmapButton
     private val clearButton: BitmapButton
     private val textPaint: Paint
